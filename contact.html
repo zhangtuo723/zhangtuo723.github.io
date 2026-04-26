@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact — zhangtuo</title>
-  <meta name="description" content="联系 zhangtuo · Agent Engineer" />
+  <meta name="description" content="联系 zhangtuo · Agent 工程师" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,14 +59,19 @@
       pointer-events: none;
     }
     ::selection { background: rgba(34, 211, 238, 0.3); color: #fff; }
+    @keyframes ripple-expand {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(25); opacity: 0; }
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
 
   <!-- Background -->
   <div class="fixed inset-0 grid-bg pointer-events-none -z-10"></div>
-  <div class="blob bg-cyan-500 w-[500px] h-[500px] -top-40 -left-40 -z-10 animate-glow-pulse"></div>
-  <div class="blob bg-purple-500 w-[500px] h-[500px] bottom-0 -right-40 -z-10 animate-glow-pulse" style="animation-delay: 2s"></div>
+  <canvas id="bgCanvas" class="fixed inset-0 -z-[5] pointer-events-none"></canvas>
+  <div class="blob blob-mouse transition-transform duration-300 ease-out bg-cyan-500 w-[500px] h-[500px] -top-40 -left-40 -z-10 animate-glow-pulse"></div>
+  <div class="blob blob-mouse transition-transform duration-300 ease-out bg-purple-500 w-[500px] h-[500px] bottom-0 -right-40 -z-10 animate-glow-pulse" style="animation-delay: 2s"></div>
 
   <!-- NAV -->
   <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/50">
@@ -76,10 +81,10 @@
         <span class="font-mono text-sm text-slate-300 group-hover:text-white transition">zhangtuo</span>
       </a>
       <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <li><a href="index.html" class="text-slate-400 hover:text-white transition">Home</a></li>
-        <li><a href="about.html" class="text-slate-400 hover:text-white transition">About</a></li>
-        <li><a href="projects.html" class="text-slate-400 hover:text-white transition">Projects</a></li>
-        <li><a href="contact.html" class="text-cyan-400 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-px after:bg-cyan-400">Contact</a></li>
+        <li><a href="index.html" class="text-slate-400 hover:text-white transition">首页</a></li>
+        <li><a href="about.html" class="text-slate-400 hover:text-white transition">关于</a></li>
+        <li><a href="projects.html" class="text-slate-400 hover:text-white transition">项目</a></li>
+        <li><a href="contact.html" class="text-cyan-400 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-px after:bg-cyan-400">联系</a></li>
       </ul>
       <button id="menuBtn" class="md:hidden text-slate-300 hover:text-white" aria-label="Toggle menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -87,10 +92,10 @@
     </nav>
     <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800/50">
       <ul class="px-6 py-4 space-y-3 text-sm">
-        <li><a href="index.html" class="block text-slate-400 hover:text-white">Home</a></li>
-        <li><a href="about.html" class="block text-slate-400 hover:text-white">About</a></li>
-        <li><a href="projects.html" class="block text-slate-400 hover:text-white">Projects</a></li>
-        <li><a href="contact.html" class="block text-cyan-400">Contact</a></li>
+        <li><a href="index.html" class="block text-slate-400 hover:text-white">首页</a></li>
+        <li><a href="about.html" class="block text-slate-400 hover:text-white">关于</a></li>
+        <li><a href="projects.html" class="block text-slate-400 hover:text-white">项目</a></li>
+        <li><a href="contact.html" class="block text-cyan-400">联系</a></li>
       </ul>
     </div>
   </header>
@@ -98,9 +103,9 @@
   <!-- CONTACT -->
   <main class="flex-1 flex items-center">
     <section class="max-w-4xl mx-auto px-6 py-16 md:py-24 w-full animate-fade-up">
-      <p class="font-mono text-sm text-cyan-400 mb-3">// contact</p>
+      <p class="font-mono text-sm text-cyan-400 mb-3">// 联系</p>
       <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-        Let's <span class="text-gradient">build</span> something.
+        一起<span class="text-gradient">创造</span>些什么。
       </h1>
       <p class="text-slate-400 text-lg max-w-2xl mb-12">
         无论是合作、咨询、还是单纯想聊聊 Agent 与 LLM —— 都欢迎随时联系。我会尽快回复。
@@ -115,7 +120,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-xs font-mono text-slate-500 mb-1">Email</p>
+            <p class="text-xs font-mono text-slate-500 mb-1">邮箱</p>
             <p class="text-white font-medium truncate group-hover:text-cyan-400 transition">hello@example.com</p>
           </div>
           <svg class="text-slate-600 group-hover:text-cyan-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
@@ -138,7 +143,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-xs font-mono text-slate-500 mb-1">WeChat</p>
+            <p class="text-xs font-mono text-slate-500 mb-1">微信</p>
             <p class="text-white font-medium truncate group-hover:text-cyan-400 transition">添加微信</p>
           </div>
           <svg class="text-slate-600 group-hover:text-cyan-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
@@ -150,7 +155,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="#fbbf24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-xs font-mono text-slate-500 mb-1">X / Twitter</p>
+            <p class="text-xs font-mono text-slate-500 mb-1">X / 推特</p>
             <p class="text-white font-medium truncate group-hover:text-cyan-400 transition">@username</p>
           </div>
           <svg class="text-slate-600 group-hover:text-cyan-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
@@ -161,8 +166,8 @@
       <!-- Closing -->
       <div class="mt-16 p-6 rounded-xl bg-slate-900/30 border border-slate-800 text-center">
         <p class="font-mono text-sm text-slate-500">
-          $ <span class="text-cyan-400">whoami</span> → zhangtuo, an agent engineer who likes
-          <span class="text-purple-400">building things</span> that matter.
+          $ <span class="text-cyan-400">whoami</span> → zhangtuo，一名喜欢构建
+          <span class="text-purple-400">有意义事物</span>的 Agent 工程师。
         </p>
       </div>
     </section>
@@ -171,13 +176,13 @@
   <!-- FOOTER -->
   <footer class="border-t border-slate-800/50 relative">
     <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-      <p class="font-mono text-slate-500">© 2026 zhangtuo · Agent Engineer</p>
+      <p class="font-mono text-slate-500">© 2026 zhangtuo · Agent 工程师</p>
       <div class="flex items-center gap-5 text-slate-500">
         <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="hover:text-cyan-400 transition" aria-label="GitHub">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
         </a>
         <!-- TODO: 改成你的邮箱 -->
-        <a href="mailto:hello@example.com" class="hover:text-cyan-400 transition" aria-label="Email">
+        <a href="mailto:hello@example.com" class="hover:text-cyan-400 transition" aria-label="邮箱">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
         </a>
       </div>
@@ -189,5 +194,6 @@
     const menu = document.getElementById('mobileMenu');
     if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
   </script>
+  <script src="bg.js"></script>
 </body>
 </html>
