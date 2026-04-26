@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — zhangtuo</title>
+  <meta name="description" content="zhangtuo 的项目作品" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          animation: {
+            'fade-up': 'fade-up 0.8s ease-out forwards',
+            'glow-pulse': 'glow-pulse 4s ease-in-out infinite',
+          },
+          keyframes: {
+            'fade-up': {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            'glow-pulse': {
+              '0%, 100%': { opacity: '0.2' },
+              '50%': { opacity: '0.4' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { background-color: #020617; }
+    html { scroll-behavior: smooth; }
+    .text-gradient {
+      background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 50%, #a855f7 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 100%);
+    }
+    .blob {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(110px);
+      pointer-events: none;
+    }
+    .card-hover:hover .arrow { transform: translate(4px, -4px); }
+    ::selection { background: rgba(34, 211, 238, 0.3); color: #fff; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- Background -->
+  <div class="fixed inset-0 grid-bg pointer-events-none -z-10"></div>
+  <div class="blob bg-cyan-500 w-[400px] h-[400px] top-20 -left-40 -z-10 animate-glow-pulse"></div>
+  <div class="blob bg-purple-500 w-[400px] h-[400px] bottom-20 -right-40 -z-10 animate-glow-pulse" style="animation-delay: 2s"></div>
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/50">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center font-bold text-slate-950 text-lg">z</div>
+        <span class="font-mono text-sm text-slate-300 group-hover:text-white transition">zhangtuo</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="index.html" class="text-slate-400 hover:text-white transition">Home</a></li>
+        <li><a href="about.html" class="text-slate-400 hover:text-white transition">About</a></li>
+        <li><a href="projects.html" class="text-cyan-400 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-px after:bg-cyan-400">Projects</a></li>
+        <li><a href="contact.html" class="text-slate-400 hover:text-white transition">Contact</a></li>
+      </ul>
+      <button id="menuBtn" class="md:hidden text-slate-300 hover:text-white" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </nav>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800/50">
+      <ul class="px-6 py-4 space-y-3 text-sm">
+        <li><a href="index.html" class="block text-slate-400 hover:text-white">Home</a></li>
+        <li><a href="about.html" class="block text-slate-400 hover:text-white">About</a></li>
+        <li><a href="projects.html" class="block text-cyan-400">Projects</a></li>
+        <li><a href="contact.html" class="block text-slate-400 hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- PROJECTS -->
+  <main class="flex-1">
+    <section class="max-w-6xl mx-auto px-6 py-16 md:py-24 animate-fade-up">
+      <p class="font-mono text-sm text-cyan-400 mb-3">// projects</p>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+        Things I've <span class="text-gradient">built</span>.
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl">
+        从 weekend hack 到生产级系统，下面是一些我引以为豪的项目。
+      </p>
+    </section>
+
+    <!-- FEATURED -->
+    <section class="max-w-6xl mx-auto px-6 pb-12">
+      <!-- TODO: 改成你的主打项目 -->
+      <a href="#" class="card-hover group block relative p-8 md:p-10 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-900/40 border border-slate-800 hover:border-cyan-400/40 transition overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between mb-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-xs font-mono text-cyan-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+              FEATURED
+            </span>
+            <svg class="arrow text-slate-500 group-hover:text-cyan-400 transition-all" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Project Alpha</h2>
+          <p class="text-slate-400 text-lg mb-6 max-w-2xl">
+            一句话描述你的旗舰项目 —— 它解决了什么问题、给谁用、最值得说的技术亮点。
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700 text-xs font-mono text-slate-300">Python</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700 text-xs font-mono text-slate-300">FastAPI</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700 text-xs font-mono text-slate-300">LangGraph</span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700 text-xs font-mono text-slate-300">Postgres</span>
+          </div>
+        </div>
+      </a>
+    </section>
+
+    <!-- GRID -->
+    <section class="max-w-6xl mx-auto px-6 pb-24">
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- TODO: 替换成真实项目 -->
+        <a href="#" class="card-hover group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400/20 to-blue-500/20 border border-cyan-400/30 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <svg class="arrow text-slate-500 group-hover:text-cyan-400 transition-all" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Agent Toolkit</h3>
+          <p class="text-slate-400 text-sm mb-4">一个轻量的 Agent 工具编排库，支持工具自动发现、并行调用与失败重试。</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-mono text-slate-500">TypeScript</span>
+            <span class="text-xs font-mono text-slate-500">·</span>
+            <span class="text-xs font-mono text-slate-500">MCP</span>
+          </div>
+        </a>
+
+        <a href="#" class="card-hover group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-400/20 to-pink-500/20 border border-purple-400/30 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <svg class="arrow text-slate-500 group-hover:text-cyan-400 transition-all" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Chat Memory</h3>
+          <p class="text-slate-400 text-sm mb-4">一个支持长期记忆的对话引擎，自动总结、检索并融合历史上下文。</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-mono text-slate-500">Python</span>
+            <span class="text-xs font-mono text-slate-500">·</span>
+            <span class="text-xs font-mono text-slate-500">Vector DB</span>
+          </div>
+        </a>
+
+        <a href="#" class="card-hover group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-400/20 to-teal-500/20 border border-emerald-400/30 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+            </div>
+            <svg class="arrow text-slate-500 group-hover:text-cyan-400 transition-all" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Workflow Studio</h3>
+          <p class="text-slate-400 text-sm mb-4">可视化拖拽编排 Agent 工作流，导出为可执行 Python 脚本。</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-mono text-slate-500">React</span>
+            <span class="text-xs font-mono text-slate-500">·</span>
+            <span class="text-xs font-mono text-slate-500">React Flow</span>
+          </div>
+        </a>
+
+        <a href="#" class="card-hover group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-400/20 to-orange-500/20 border border-amber-400/30 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <svg class="arrow text-slate-500 group-hover:text-cyan-400 transition-all" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Daily Brief</h3>
+          <p class="text-slate-400 text-sm mb-4">每天早上生成你的资讯简报，自动抓取、去重、用 LLM 总结。</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-mono text-slate-500">Go</span>
+            <span class="text-xs font-mono text-slate-500">·</span>
+            <span class="text-xs font-mono text-slate-500">Cron</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- See more -->
+      <div class="mt-12 text-center">
+        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition font-mono text-sm">
+          See more on GitHub
+          <span>→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/50 relative">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+      <p class="font-mono text-slate-500">© 2026 zhangtuo · Agent Engineer</p>
+      <div class="flex items-center gap-5 text-slate-500">
+        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="hover:text-cyan-400 transition" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+        <!-- TODO: 改成你的邮箱 -->
+        <a href="mailto:hello@example.com" class="hover:text-cyan-400 transition" aria-label="Email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+  </script>
+</body>
+</html>

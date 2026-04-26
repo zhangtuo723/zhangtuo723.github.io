@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — zhangtuo</title>
+  <meta name="description" content="关于 zhangtuo · Agent Engineer" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          animation: {
+            'fade-up': 'fade-up 0.8s ease-out forwards',
+            'glow-pulse': 'glow-pulse 4s ease-in-out infinite',
+          },
+          keyframes: {
+            'fade-up': {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            'glow-pulse': {
+              '0%, 100%': { opacity: '0.2' },
+              '50%': { opacity: '0.4' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { background-color: #020617; }
+    html { scroll-behavior: smooth; }
+    .text-gradient {
+      background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 50%, #a855f7 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 100%);
+    }
+    .blob {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(110px);
+      pointer-events: none;
+    }
+    ::selection { background: rgba(34, 211, 238, 0.3); color: #fff; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- Background -->
+  <div class="fixed inset-0 grid-bg pointer-events-none -z-10"></div>
+  <div class="blob bg-cyan-500 w-[400px] h-[400px] top-20 -left-40 -z-10 animate-glow-pulse"></div>
+  <div class="blob bg-purple-500 w-[400px] h-[400px] bottom-20 -right-40 -z-10 animate-glow-pulse" style="animation-delay: 2s"></div>
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/50">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center font-bold text-slate-950 text-lg">z</div>
+        <span class="font-mono text-sm text-slate-300 group-hover:text-white transition">zhangtuo</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="index.html" class="text-slate-400 hover:text-white transition">Home</a></li>
+        <li><a href="about.html" class="text-cyan-400 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-px after:bg-cyan-400">About</a></li>
+        <li><a href="projects.html" class="text-slate-400 hover:text-white transition">Projects</a></li>
+        <li><a href="contact.html" class="text-slate-400 hover:text-white transition">Contact</a></li>
+      </ul>
+      <button id="menuBtn" class="md:hidden text-slate-300 hover:text-white" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </nav>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800/50">
+      <ul class="px-6 py-4 space-y-3 text-sm">
+        <li><a href="index.html" class="block text-slate-400 hover:text-white">Home</a></li>
+        <li><a href="about.html" class="block text-cyan-400">About</a></li>
+        <li><a href="projects.html" class="block text-slate-400 hover:text-white">Projects</a></li>
+        <li><a href="contact.html" class="block text-slate-400 hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <main class="flex-1">
+    <section class="max-w-4xl mx-auto px-6 py-16 md:py-24 animate-fade-up">
+      <p class="font-mono text-sm text-cyan-400 mb-3">// about</p>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-8">
+        Building agents that <span class="text-gradient">think with you</span>.
+      </h1>
+
+      <!-- TODO: 改成你的 bio -->
+      <div class="space-y-5 text-lg text-slate-400 leading-relaxed">
+        <p>
+          我是 <span class="text-white font-semibold">zhangtuo</span>，一名 Agent 工程师。
+          日常专注于探索 LLM 与工具调用的边界，把"看似魔法"的能力变成稳定可靠的工程系统。
+        </p>
+        <p>
+          相比堆叠新模型，我更着迷于<span class="text-cyan-400">系统设计</span>：
+          上下文管理、工具编排、记忆机制、人机协作 —— 这些细节决定了一个 Agent 是 demo 还是 product。
+        </p>
+        <p>
+          闲暇时写写小工具、读硬科幻、跑步。相信好的工具应该让人变得更聪明，而不是更依赖。
+        </p>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="max-w-4xl mx-auto px-6 py-16">
+      <p class="font-mono text-sm text-cyan-400 mb-3">// skills</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-10">Tech I work with</h2>
+
+      <!-- TODO: 改成你的技能栈 -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <!-- skill card template -->
+        <div class="group p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <h3 class="font-semibold text-white mb-1">Languages</h3>
+          <p class="text-sm text-slate-400 font-mono">Python · TypeScript · Go</p>
+        </div>
+        <div class="group p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <h3 class="font-semibold text-white mb-1">LLM / Agents</h3>
+          <p class="text-sm text-slate-400 font-mono">Claude · GPT · LangGraph · MCP</p>
+        </div>
+        <div class="group p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <h3 class="font-semibold text-white mb-1">Frameworks</h3>
+          <p class="text-sm text-slate-400 font-mono">FastAPI · React · Next.js</p>
+        </div>
+        <div class="group p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <h3 class="font-semibold text-white mb-1">Infra</h3>
+          <p class="text-sm text-slate-400 font-mono">Docker · K8s · Postgres · Redis</p>
+        </div>
+        <div class="group p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <h3 class="font-semibold text-white mb-1">ML / RAG</h3>
+          <p class="text-sm text-slate-400 font-mono">PyTorch · Embeddings · Vector DB</p>
+        </div>
+        <div class="group p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-400/40 hover:bg-slate-900/70 transition">
+          <h3 class="font-semibold text-white mb-1">Tools</h3>
+          <p class="text-sm text-slate-400 font-mono">Git · Linux · Vim · Claude Code</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOW -->
+    <section class="max-w-4xl mx-auto px-6 py-16 mb-10">
+      <p class="font-mono text-sm text-cyan-400 mb-3">// now</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-6">What I'm doing now</h2>
+      <!-- TODO: 改成你最近在做什么 -->
+      <div class="p-6 rounded-xl bg-slate-900/40 border border-slate-800">
+        <ul class="space-y-3 text-slate-400">
+          <li class="flex gap-3">
+            <span class="text-cyan-400 mt-1.5">▸</span>
+            <span>探索多 Agent 协作框架与工具自动发现机制</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-cyan-400 mt-1.5">▸</span>
+            <span>把日常工作流封装成可复用的 Skill 模块</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-cyan-400 mt-1.5">▸</span>
+            <span>读《The Pragmatic Programmer》《Designing Data-Intensive Applications》</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/50 relative">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+      <p class="font-mono text-slate-500">© 2026 zhangtuo · Agent Engineer</p>
+      <div class="flex items-center gap-5 text-slate-500">
+        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="hover:text-cyan-400 transition" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+        <!-- TODO: 改成你的邮箱 -->
+        <a href="mailto:hello@example.com" class="hover:text-cyan-400 transition" aria-label="Email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+  </script>
+</body>
+</html>
