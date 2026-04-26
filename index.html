@@ -8,105 +8,181 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            pixel: ['"Press Start 2P"', 'cursive'],
+            body: ['VT323', 'monospace'],
           },
-          animation: {
-            'gradient-x': 'gradient-x 8s ease infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'fade-up': 'fade-up 0.8s ease-out forwards',
-            'glow-pulse': 'glow-pulse 4s ease-in-out infinite',
-          },
-          keyframes: {
-            'gradient-x': {
-              '0%, 100%': { 'background-position': '0% 50%' },
-              '50%': { 'background-position': '100% 50%' },
-            },
-            'float': {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-15px)' },
-            },
-            'fade-up': {
-              '0%': { opacity: '0', transform: 'translateY(20px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            },
-            'glow-pulse': {
-              '0%, 100%': { opacity: '0.25' },
-              '50%': { opacity: '0.45' },
-            },
-          },
+          colors: {
+            pixel: {
+              bg: '#0c0c14',
+              fg: '#c8c8c8',
+              dim: '#6b6b7b',
+              dark: '#1a1a2e',
+              border: '#2a2a3a',
+              cyan: '#00e5ff',
+              magenta: '#ff00a0',
+              gold: '#ffd700',
+              green: '#00ff88',
+            }
+          }
         },
       },
     };
   </script>
   <style>
-    body { background-color: #020617; }
+    body {
+      background-color: #0c0c14;
+      font-family: 'VT323', monospace;
+      image-rendering: pixelated;
+    }
     html { scroll-behavior: smooth; }
-    .text-gradient {
-      background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 50%, #a855f7 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, #000 40%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, #000 40%, transparent 100%);
-    }
-    .blob {
-      position: absolute;
-      border-radius: 9999px;
-      filter: blur(110px);
+
+    /* CRT scanline effect */
+    .scanlines::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
       pointer-events: none;
+      z-index: 9999;
     }
-    ::selection { background: rgba(34, 211, 238, 0.3); color: #fff; }
-    @keyframes ripple-expand {
-      0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(25); opacity: 0; }
+
+    /* Pixel grid background */
+    .pixel-grid {
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
     }
+
+    /* Pixel box shadow */
+    .pixel-shadow {
+      box-shadow:
+        4px 4px 0px #2a2a3a,
+        4px 4px 0px 1px #2a2a3a;
+    }
+    .pixel-shadow-cyan {
+      box-shadow:
+        4px 4px 0px #00e5ff,
+        4px 4px 0px 1px #00e5ff;
+    }
+    .pixel-shadow-magenta {
+      box-shadow:
+        4px 4px 0px #ff00a0,
+        4px 4px 0px 1px #ff00a0;
+    }
+
+    /* Pixel border style */
+    .pixel-border {
+      border: 2px solid #2a2a3a;
+    }
+    .pixel-border-cyan {
+      border: 2px solid #00e5ff;
+    }
+
+    /* Text glow */
+    .glow-cyan {
+      text-shadow:
+        0 0 4px #00e5ff,
+        0 0 8px #00e5ff;
+    }
+    .glow-magenta {
+      text-shadow:
+        0 0 4px #ff00a0,
+        0 0 8px #ff00a0;
+    }
+
+    /* Blinking cursor */
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .cursor-blink::after {
+      content: '_';
+      animation: blink 1s step-end infinite;
+    }
+
+    /* Pixel button hover */
+    .pixel-btn {
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .pixel-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #00e5ff;
+    }
+    .pixel-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #00e5ff;
+    }
+
+    /* Pixel card hover */
+    .pixel-card {
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .pixel-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #ff00a0;
+      border-color: #ff00a0;
+    }
+
+    ::selection {
+      background: #00e5ff;
+      color: #0c0c14;
+    }
+
+    /* Scrollbar pixel style */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #0c0c14; }
+    ::-webkit-scrollbar-thumb { background: #2a2a3a; border: 1px solid #00e5ff; }
+    ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-200 font-sans antialiased min-h-screen flex flex-col overflow-x-hidden">
+<body class="scanlines text-pixel-fg min-h-screen flex flex-col overflow-x-hidden">
 
   <!-- Background -->
-  <div class="fixed inset-0 grid-bg pointer-events-none -z-10"></div>
+  <div class="fixed inset-0 pixel-grid pointer-events-none -z-10"></div>
   <canvas id="bgCanvas" class="fixed inset-0 -z-[5] pointer-events-none"></canvas>
-  <div class="blob blob-mouse transition-transform duration-300 ease-out bg-cyan-500 w-[500px] h-[500px] -top-40 -left-40 -z-10 animate-glow-pulse"></div>
-  <div class="blob blob-mouse transition-transform duration-300 ease-out bg-purple-500 w-[500px] h-[500px] top-1/3 -right-40 -z-10 animate-glow-pulse" style="animation-delay: 2s"></div>
+
+  <!-- Decorative pixel corner brackets -->
+  <div class="fixed top-4 left-4 w-6 h-6 border-l-2 border-t-2 border-pixel-cyan pointer-events-none z-50"></div>
+  <div class="fixed top-4 right-4 w-6 h-6 border-r-2 border-t-2 border-pixel-cyan pointer-events-none z-50"></div>
+  <div class="fixed bottom-4 left-4 w-6 h-6 border-l-2 border-b-2 border-pixel-cyan pointer-events-none z-50"></div>
+  <div class="fixed bottom-4 right-4 w-6 h-6 border-r-2 border-b-2 border-pixel-cyan pointer-events-none z-50"></div>
 
   <!-- NAV -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/50">
-    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 group">
-        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center font-bold text-slate-950 text-lg">z</div>
-        <span class="font-mono text-sm text-slate-300 group-hover:text-white transition">zhangtuo</span>
+  <header class="sticky top-0 z-40 bg-pixel-bg/95 border-b-2 border-pixel-border">
+    <nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-8 h-8 bg-pixel-cyan flex items-center justify-center font-pixel text-pixel-bg text-xs pixel-shadow">Z</div>
+        <span class="font-pixel text-xs text-pixel-dim group-hover:text-pixel-cyan transition-colors">zhangtuo</span>
       </a>
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <li><a href="index.html" class="text-cyan-400 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-px after:bg-cyan-400">首页</a></li>
-        <li><a href="about.html" class="text-slate-400 hover:text-white transition">关于</a></li>
-        <li><a href="projects.html" class="text-slate-400 hover:text-white transition">项目</a></li>
-        <li><a href="contact.html" class="text-slate-400 hover:text-white transition">联系</a></li>
+      <ul class="hidden md:flex items-center gap-6 text-sm font-body tracking-wide">
+        <li><a href="index.html" class="text-pixel-cyan glow-cyan">[首页]</a></li>
+        <li><a href="about.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[关于]</a></li>
+        <li><a href="projects.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[项目]</a></li>
+        <li><a href="contact.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[联系]</a></li>
       </ul>
-      <button id="menuBtn" class="md:hidden text-slate-300 hover:text-white" aria-label="Toggle menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <button id="menuBtn" class="md:hidden text-pixel-cyan font-pixel text-xs" aria-label="Toggle menu">
+        [MENU]
       </button>
     </nav>
-    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800/50">
-      <ul class="px-6 py-4 space-y-3 text-sm">
-        <li><a href="index.html" class="block text-cyan-400">首页</a></li>
-        <li><a href="about.html" class="block text-slate-400 hover:text-white">关于</a></li>
-        <li><a href="projects.html" class="block text-slate-400 hover:text-white">项目</a></li>
-        <li><a href="contact.html" class="block text-slate-400 hover:text-white">联系</a></li>
+    <div id="mobileMenu" class="hidden md:hidden border-t-2 border-pixel-border bg-pixel-dark">
+      <ul class="px-6 py-4 space-y-3 text-sm font-pixel">
+        <li><a href="index.html" class="block text-pixel-cyan">&gt; 首页</a></li>
+        <li><a href="about.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 关于</a></li>
+        <li><a href="projects.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 项目</a></li>
+        <li><a href="contact.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 联系</a></li>
       </ul>
     </div>
   </header>
@@ -114,47 +190,46 @@
   <!-- HERO -->
   <main class="flex-1 flex items-center relative">
     <section class="max-w-6xl mx-auto px-6 py-20 md:py-32 w-full">
-      <div class="max-w-4xl space-y-8 animate-fade-up">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/60 border border-slate-800 text-xs font-mono text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>欢迎新的机会</span>
+      <div class="max-w-4xl space-y-8">
+        <!-- Status badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-2 bg-pixel-dark pixel-border">
+          <span class="w-2 h-2 bg-pixel-green animate-pulse"></span>
+          <span class="font-pixel text-[10px] text-pixel-dim">WELCOME_NEW_OPPORTUNITIES</span>
         </div>
 
-        <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05]">
-          Hi, I'm <span class="text-gradient animate-gradient-x inline-block">zhangtuo</span>.
+        <h1 class="font-pixel text-2xl md:text-4xl lg:text-5xl leading-relaxed tracking-wide">
+          Hi, I'm <span class="text-pixel-cyan glow-cyan">zhangtuo</span>.
           <br />
-          <span class="text-slate-400 text-3xl md:text-5xl lg:text-6xl font-bold">Agent Engineer</span>
+          <span class="text-pixel-dim text-lg md:text-2xl lg:text-3xl">Agent Engineer</span>
         </h1>
 
-        <!-- TODO: 改成你的 tagline -->
-        <p class="text-lg md:text-xl text-slate-400 max-w-2xl leading-relaxed">
+        <p class="text-xl md:text-2xl text-pixel-dim max-w-2xl leading-relaxed font-body tracking-wide">
           专注于构建智能 Agent 系统、LLM 应用与自动化工作流。<br />
           相信代码是思考的杠杆，工具是创造力的放大器。
         </p>
 
         <div class="flex flex-wrap gap-4 pt-4">
-          <a href="projects.html" class="group relative px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-400 to-purple-500 text-slate-950 font-semibold transition hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25">
-            查看作品
-            <span class="ml-1 inline-block transition group-hover:translate-x-1">→</span>
+          <a href="projects.html" class="pixel-btn inline-block px-6 py-3 bg-pixel-cyan text-pixel-bg font-pixel text-xs pixel-border">
+            &gt; 查看作品
           </a>
-          <a href="contact.html" class="px-6 py-3 rounded-lg border border-slate-700 bg-slate-900/30 text-slate-300 hover:border-cyan-400 hover:text-cyan-400 transition">
-            联系我
+          <a href="contact.html" class="pixel-btn inline-block px-6 py-3 bg-pixel-dark text-pixel-cyan font-pixel text-xs pixel-border-cyan">
+            &gt; 联系我
           </a>
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-3 gap-4 md:gap-10 pt-12 max-w-xl">
-          <div>
-            <div class="text-2xl md:text-3xl font-bold text-white">∞</div>
-            <div class="text-xs md:text-sm text-slate-500 mt-1 font-mono">好奇心</div>
+        <div class="grid grid-cols-3 gap-4 md:gap-8 pt-12 max-w-xl">
+          <div class="pixel-border bg-pixel-dark p-4 text-center">
+            <div class="font-pixel text-lg md:text-xl text-pixel-cyan">INF</div>
+            <div class="font-pixel text-[8px] text-pixel-dim mt-2">CURIOSITY</div>
           </div>
-          <div>
-            <div class="text-2xl md:text-3xl font-bold text-white">24/7</div>
-            <div class="text-xs md:text-sm text-slate-500 mt-1 font-mono">持续构建</div>
+          <div class="pixel-border bg-pixel-dark p-4 text-center">
+            <div class="font-pixel text-lg md:text-xl text-pixel-magenta">24/7</div>
+            <div class="font-pixel text-[8px] text-pixel-dim mt-2">BUILDING</div>
           </div>
-          <div>
-            <div class="text-2xl md:text-3xl font-bold text-white">1.0</div>
-            <div class="text-xs md:text-sm text-slate-500 mt-1 font-mono">专注</div>
+          <div class="pixel-border bg-pixel-dark p-4 text-center">
+            <div class="font-pixel text-lg md:text-xl text-pixel-gold">v1.0</div>
+            <div class="font-pixel text-[8px] text-pixel-dim mt-2">FOCUS</div>
           </div>
         </div>
       </div>
@@ -162,16 +237,15 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-slate-800/50 relative">
-    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
-      <p class="font-mono text-slate-500">© 2026 zhangtuo · Agent 工程师</p>
-      <div class="flex items-center gap-5 text-slate-500">
-        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="hover:text-cyan-400 transition" aria-label="GitHub">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+  <footer class="border-t-2 border-pixel-border bg-pixel-dark/50">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="font-pixel text-[8px] text-pixel-dim">© 2026 zhangtuo · Agent 工程师</p>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="text-pixel-dim hover:text-pixel-cyan transition font-pixel text-[10px]" aria-label="GitHub">
+          [GITHUB]
         </a>
-        <!-- TODO: 改成你的邮箱 -->
-        <a href="mailto:hello@example.com" class="hover:text-cyan-400 transition" aria-label="Email">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:1605728334@qq.com" class="text-pixel-dim hover:text-pixel-cyan transition font-pixel text-[10px]" aria-label="Email">
+          [EMAIL]
         </a>
       </div>
     </div>
