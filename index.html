@@ -1,261 +1,577 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zhangtuo — Agent 工程师</title>
-  <meta name="description" content="zhangtuo · Agent 工程师 · 个人作品集" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            pixel: ['"Press Start 2P"', 'cursive'],
-            body: ['VT323', 'monospace'],
-          },
-          colors: {
-            pixel: {
-              bg: '#0c0c14',
-              fg: '#c8c8c8',
-              dim: '#6b6b7b',
-              dark: '#1a1a2e',
-              border: '#2a2a3a',
-              cyan: '#00e5ff',
-              magenta: '#ff00a0',
-              gold: '#ffd700',
-              green: '#00ff88',
-            }
-          }
-        },
-      },
-    };
-  </script>
-  <style>
-    body {
-      background-color: #0c0c14;
-      font-family: 'VT323', monospace;
-      image-rendering: pixelated;
-    }
-    html { scroll-behavior: smooth; }
+<!doctype html>
+<html lang="zh-CN" data-motion="off" data-view="immersive">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#aeb9a7" />
+    <title>About zhangtuo — Agent 工程师</title>
+    <meta
+      name="description"
+      content="你好，我是 zhangtuo，一名 Agent 工程师。探索智能体、LLM 应用与自动化工作流，把好奇心变成真实可用的工具。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content="About zhangtuo — Agent 工程师" />
+    <meta
+      property="og:description"
+      content="让想法发生，让工具思考。zhangtuo 的个人介绍与开源作品。"
+    />
+    <meta property="og:url" content="https://zhangtuo723.github.io/" />
+    <meta
+      property="og:image"
+      content="https://zhangtuo723.github.io/assets/social-cover.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/mansalva-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="site.js" defer></script>
+  </head>
+  <body data-phase="hero">
+    <a class="skip-link" href="#main">跳转到正文</a>
 
-    /* CRT scanline effect */
-    .scanlines::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15) 0px,
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 9999;
-    }
+    <div id="portrait-scene" class="portrait-scene" aria-hidden="true">
+      <img
+        class="scene-poster"
+        src="assets/character-poster.webp"
+        alt=""
+        width="1122"
+        height="1402"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+    <div class="scene-scrim" aria-hidden="true"></div>
 
-    /* Pixel grid background */
-    .pixel-grid {
-      background-image:
-        linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
-
-    /* Pixel box shadow */
-    .pixel-shadow {
-      box-shadow:
-        4px 4px 0px #2a2a3a,
-        4px 4px 0px 1px #2a2a3a;
-    }
-    .pixel-shadow-cyan {
-      box-shadow:
-        4px 4px 0px #00e5ff,
-        4px 4px 0px 1px #00e5ff;
-    }
-    .pixel-shadow-magenta {
-      box-shadow:
-        4px 4px 0px #ff00a0,
-        4px 4px 0px 1px #ff00a0;
-    }
-
-    /* Pixel border style */
-    .pixel-border {
-      border: 2px solid #2a2a3a;
-    }
-    .pixel-border-cyan {
-      border: 2px solid #00e5ff;
-    }
-
-    /* Text glow */
-    .glow-cyan {
-      text-shadow:
-        0 0 4px #00e5ff,
-        0 0 8px #00e5ff;
-    }
-    .glow-magenta {
-      text-shadow:
-        0 0 4px #ff00a0,
-        0 0 8px #ff00a0;
-    }
-
-    /* Blinking cursor */
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-    .cursor-blink::after {
-      content: '_';
-      animation: blink 1s step-end infinite;
-    }
-
-    /* Pixel button hover */
-    .pixel-btn {
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .pixel-btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #00e5ff;
-    }
-    .pixel-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px #00e5ff;
-    }
-
-    /* Pixel card hover */
-    .pixel-card {
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .pixel-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #ff00a0;
-      border-color: #ff00a0;
-    }
-
-    ::selection {
-      background: #00e5ff;
-      color: #0c0c14;
-    }
-
-    /* Scrollbar pixel style */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #0c0c14; }
-    ::-webkit-scrollbar-thumb { background: #2a2a3a; border: 1px solid #00e5ff; }
-    ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
-  </style>
-</head>
-<body class="scanlines text-pixel-fg min-h-screen flex flex-col overflow-x-hidden">
-
-  <!-- Background -->
-  <div class="fixed inset-0 pixel-grid pointer-events-none -z-10"></div>
-  <canvas id="bgCanvas" class="fixed inset-0 -z-[5] pointer-events-none"></canvas>
-
-  <!-- Decorative pixel corner brackets -->
-  <div class="fixed top-4 left-4 w-6 h-6 border-l-2 border-t-2 border-pixel-cyan pointer-events-none z-50"></div>
-  <div class="fixed top-4 right-4 w-6 h-6 border-r-2 border-t-2 border-pixel-cyan pointer-events-none z-50"></div>
-  <div class="fixed bottom-4 left-4 w-6 h-6 border-l-2 border-b-2 border-pixel-cyan pointer-events-none z-50"></div>
-  <div class="fixed bottom-4 right-4 w-6 h-6 border-r-2 border-b-2 border-pixel-cyan pointer-events-none z-50"></div>
-
-  <!-- NAV -->
-  <header class="sticky top-0 z-40 bg-pixel-bg/95 border-b-2 border-pixel-border">
-    <nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-3 group">
-        <div class="w-8 h-8 bg-pixel-cyan flex items-center justify-center font-pixel text-pixel-bg text-xs pixel-shadow">Z</div>
-        <span class="font-pixel text-xs text-pixel-dim group-hover:text-pixel-cyan transition-colors">zhangtuo</span>
-      </a>
-      <ul class="hidden md:flex items-center gap-6 text-sm font-body tracking-wide">
-        <li><a href="index.html" class="text-pixel-cyan glow-cyan">[首页]</a></li>
-        <li><a href="about.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[关于]</a></li>
-        <li><a href="projects.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[项目]</a></li>
-        <li><a href="contact.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[联系]</a></li>
-      </ul>
-      <button id="menuBtn" class="md:hidden text-pixel-cyan font-pixel text-xs" aria-label="Toggle menu">
-        [MENU]
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="zhangtuo，返回首页"
+        >zhangtuo<span aria-hidden="true">✳</span></a
+      >
+      <button
+        class="menu-toggle"
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="site-navigation"
+        aria-label="打开导航菜单"
+        hidden
+      >
+        菜单 <span aria-hidden="true">+</span>
       </button>
-    </nav>
-    <div id="mobileMenu" class="hidden md:hidden border-t-2 border-pixel-border bg-pixel-dark">
-      <ul class="px-6 py-4 space-y-3 text-sm font-pixel">
-        <li><a href="index.html" class="block text-pixel-cyan">&gt; 首页</a></li>
-        <li><a href="about.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 关于</a></li>
-        <li><a href="projects.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 项目</a></li>
-        <li><a href="contact.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 联系</a></li>
-      </ul>
+      <nav
+        class="header-links"
+        id="site-navigation"
+        data-navigation
+        aria-label="主导航"
+      >
+        <a href="#about">关于</a>
+        <a href="#works">作品</a>
+        <a href="#contact">联系 <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="home" aria-labelledby="hero-title">
+        <div class="hero-corner hero-corner-left">
+          <span>PERSONAL SPACE</span>
+          <span>Code, curiosity &amp; a little play.</span>
+        </div>
+        <div class="hero-corner hero-corner-right">
+          <span>AGENT ENGINEER</span>
+          <span>Portfolio / 2026</span>
+        </div>
+        <div class="hero-frame" aria-hidden="true">
+          <span>+</span><span>+</span><span>+</span><span>+</span>
+        </div>
+        <div class="hero-copy">
+          <p class="hero-kicker">你好，欢迎来到我的小小世界。</p>
+          <h1 id="hero-title" lang="en">
+            About <span>zhangtuo</span><i aria-hidden="true">✳</i>
+          </h1>
+          <p class="hero-description">
+            一名喜欢把「如果」变成现实的
+            <strong>Agent 工程师</strong
+            >。<br />在代码、智能体和日常灵感之间，认真构建，也保持好奇。
+          </p>
+          <div class="hero-actions">
+            <a class="pill-link pill-light" href="#works"
+              >看看我的作品 <span aria-hidden="true">↗</span></a
+            >
+            <a class="pill-link pill-clear" href="#contact"
+              >打个招呼 <span aria-hidden="true">↗</span></a
+            >
+          </div>
+        </div>
+        <a class="scroll-cue" href="#about"
+          ><span class="scroll-track" aria-hidden="true"><span></span></span
+          ><span>向下滚动，认识我</span><span aria-hidden="true">↓</span></a
+        >
+        <span class="hero-side-note" aria-hidden="true"
+          >A WORK IN PROGRESS, ALWAYS.</span
+        >
+      </section>
+
+      <section class="journey" id="about" aria-labelledby="journey-title">
+        <h2 class="sr-only" id="journey-title">关于我：三个正在探索的方向</h2>
+        <div id="journey" class="journey-anchor" aria-hidden="true"></div>
+        <article
+          class="journey-chapter"
+          data-chapter="1"
+          aria-labelledby="chapter-one-title"
+        >
+          <div class="chapter-copy">
+            <p class="chapter-label"><span>01 / 03</span> ABOUT ME</p>
+            <h3 id="chapter-one-title">让工具，<br />与你一起思考。</h3>
+            <p>
+              我是 zhangtuo，一名 Agent 工程师。日常专注于智能 Agent 系统、LLM
+              应用与自动化工作流，把「看似魔法」的能力，变成稳定可靠的工程系统。
+            </p>
+            <p>
+              相比堆叠新模型，我更着迷于系统设计：上下文管理、工具编排、记忆机制与人机协作。
+            </p>
+            <div class="chapter-tags" aria-label="探索方向">
+              <span>AI Agents</span><span>LLM</span><span>Automation</span>
+            </div>
+            <span class="chapter-handnote" aria-hidden="true"
+              >make things think.</span
+            >
+          </div>
+        </article>
+        <article
+          class="journey-chapter"
+          data-chapter="2"
+          aria-labelledby="chapter-two-title"
+        >
+          <div class="chapter-copy">
+            <p class="chapter-label"><span>02 / 03</span> HOW I BUILD</p>
+            <h3 id="chapter-two-title">复杂留给系统，<br />简单留给用户。</h3>
+            <p>
+              从一个浏览器里的小工具，到一条能自己执行的工作流，我在意的不只是「能跑」，还有它是否真正好用。
+            </p>
+            <p>
+              用 Python、TypeScript 与 Go 连接想法，用 React、FastAPI
+              和熟悉的基础设施把它实现。让 demo 走向
+              product，也让技术回到具体问题。
+            </p>
+            <div class="chapter-tags" aria-label="技术栈">
+              <span>Python</span><span>TypeScript</span><span>Go</span
+              ><span>React</span>
+            </div>
+            <span class="chapter-handnote" aria-hidden="true"
+              >less friction, more possibility.</span
+            >
+          </div>
+        </article>
+        <article
+          class="journey-chapter"
+          data-chapter="3"
+          aria-labelledby="chapter-three-title"
+        >
+          <div class="chapter-copy">
+            <p class="chapter-label"><span>03 / 03</span> STILL CURIOUS</p>
+            <h3 id="chapter-three-title">在探索里学习，<br />在开源里相遇。</h3>
+            <p>
+              最近在探索多 Agent
+              协作与工具自动发现，也在把日常工作流封装成可以复用的
+              Skill。强化学习、模型微调，都是这场探索的一部分。
+            </p>
+            <p>
+              闲下来会写小工具、读硬科幻、跑步。我相信，好的工具应该让人变得更聪明，也更自由地创造。
+            </p>
+            <a
+              class="underlined-link"
+              href="https://github.com/zhangtuo723"
+              target="_blank"
+              rel="noopener noreferrer"
+              >到 GitHub 看看我在做什么 <span aria-hidden="true">↗</span
+              ><span class="sr-only">（新窗口）</span></a
+            >
+            <span class="chapter-handnote" aria-hidden="true"
+              >stay curious. keep making.</span
+            >
+          </div>
+        </article>
+      </section>
+
+      <section class="works-section" id="works" aria-labelledby="works-title">
+        <div class="works-stage" data-gallery>
+          <div class="gallery-sticky">
+            <div class="works-heading">
+              <div>
+                <p class="section-kicker">A FEW THINGS I’VE MADE</p>
+                <h2 id="works-title">
+                  想法，正在发生<span aria-hidden="true">.</span>
+                </h2>
+              </div>
+              <p class="works-intro">
+                从日常工具到智能体，<br />一些认真做过的小事。
+              </p>
+            </div>
+            <div
+              class="work-track"
+              data-gallery-track
+              tabindex="0"
+              role="region"
+              aria-label="四个精选项目，可横向滚动浏览"
+            >
+              <article
+                class="work-card"
+                data-work-card
+                aria-labelledby="forgekit-title"
+              >
+                <div class="work-art work-art-tools">
+                  <img
+                    src="assets/modular-tools.webp"
+                    alt="银白色与绿色模块组成的抽象开发者工具系统"
+                    width="1536"
+                    height="1024"
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <span class="art-caption"
+                    >TOOLS THAT GET OUT OF YOUR WAY.</span
+                  >
+                  <span class="work-index" aria-hidden="true">01</span>
+                </div>
+                <div class="work-copy">
+                  <p class="work-category">DEVELOPER TOOLS / 已上线</p>
+                  <h3 id="forgekit-title">
+                    <a
+                      href="https://forgekit.cn/zh"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >ForgeKit <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </h3>
+                  <p>
+                    一套纯浏览器端的开发者在线工具箱。打开即用，让开发中的琐碎问题，在一个地方解决。
+                  </p>
+                  <p class="work-note">数据不离开浏览器。</p>
+                  <ul class="work-tags" aria-label="项目技术">
+                    <li>React</li>
+                    <li>TypeScript</li>
+                    <li>PWA</li>
+                  </ul>
+                  <div class="work-actions">
+                    <button
+                      class="detail-button"
+                      type="button"
+                      data-work="forgekit"
+                      hidden
+                      aria-haspopup="dialog"
+                    >
+                      展开项目 <span aria-hidden="true">↗</span></button
+                    ><a
+                      href="https://github.com/zhangtuo723/ForgeKit"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >源码 <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </div>
+                </div>
+              </article>
+              <article
+                class="work-card"
+                data-work-card
+                aria-labelledby="analysis-title"
+              >
+                <div class="work-art work-art-agent">
+                  <img
+                    src="assets/neural-sculpture.webp"
+                    alt="环绕智能核心的绿色轨道，象征从信息到洞察的连接"
+                    width="1536"
+                    height="1024"
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <span class="art-caption"
+                    >FROM A QUESTION TO AN INSIGHT.</span
+                  >
+                  <span class="work-index" aria-hidden="true">02</span>
+                </div>
+                <div class="work-copy">
+                  <p class="work-category">AI AGENT / 内容洞察</p>
+                  <h3 id="analysis-title">
+                    <a
+                      href="https://github.com/zhangtuo723/hot_analysis_plugin"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >小红书<br />爆款分析助手
+                      <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </h3>
+                  <p>
+                    从一句提问到一份洞察。Agent
+                    自动操控浏览器，分析笔记、评论与视频，输出可视化的内容规律报告。
+                  </p>
+                  <ul class="work-tags" aria-label="项目技术">
+                    <li>Python</li>
+                    <li>AI Agent</li>
+                    <li>Browser</li>
+                  </ul>
+                  <div class="work-actions">
+                    <button
+                      class="detail-button"
+                      type="button"
+                      data-work="analysis"
+                      hidden
+                      aria-haspopup="dialog"
+                    >
+                      展开项目 <span aria-hidden="true">↗</span></button
+                    ><a
+                      href="https://github.com/zhangtuo723/hot_analysis_plugin"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >源码 <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </div>
+                </div>
+              </article>
+              <article
+                class="work-card"
+                data-work-card
+                aria-labelledby="flappy-title"
+              >
+                <div class="work-art work-art-flappy">
+                  <div class="flappy-diagram" aria-hidden="true">
+                    <span class="flappy-orbit orbit-one"></span
+                    ><span class="flappy-orbit orbit-two"></span
+                    ><span class="flappy-bird"><i></i></span
+                    ><span class="flappy-obstacle obstacle-one"></span
+                    ><span class="flappy-obstacle obstacle-two"></span
+                    ><span class="flappy-ground"></span
+                    ><span class="flappy-state">STATE → ACTION → REWARD</span>
+                  </div>
+                  <span class="art-caption"
+                    >LEARNING, ONE ATTEMPT AT A TIME.</span
+                  >
+                  <span class="work-index" aria-hidden="true">03</span>
+                </div>
+                <div class="work-copy">
+                  <p class="work-category">REINFORCEMENT LEARNING / 实验</p>
+                  <h3 id="flappy-title">
+                    <a
+                      href="https://github.com/zhangtuo723/FlappyBird_Qlearning"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >FlappyBird<br />Q-learning
+                      <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </h3>
+                  <p>
+                    用 PyTorch
+                    实现的强化学习入门项目。在一个小小的游戏世界里，串起状态、动作、奖励与
+                    Q-learning / DQN 的核心概念。
+                  </p>
+                  <ul class="work-tags" aria-label="项目技术">
+                    <li>Python</li>
+                    <li>PyTorch</li>
+                    <li>RL</li>
+                  </ul>
+                  <div class="work-actions">
+                    <button
+                      class="detail-button"
+                      type="button"
+                      data-work="flappy"
+                      hidden
+                      aria-haspopup="dialog"
+                    >
+                      展开项目 <span aria-hidden="true">↗</span></button
+                    ><a
+                      href="https://github.com/zhangtuo723/FlappyBird_Qlearning"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >源码 <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </div>
+                </div>
+              </article>
+              <article
+                class="work-card"
+                data-work-card
+                aria-labelledby="poetry-title"
+              >
+                <div class="work-art work-art-poetry">
+                  <div class="poetry-diagram" aria-hidden="true">
+                    <span class="poetry-moon"></span
+                    ><span class="poetry-mountain mountain-one"></span
+                    ><span class="poetry-mountain mountain-two"></span
+                    ><span class="poetry-characters">山<span>川</span>月</span
+                    ><span class="poetry-seal">字里<br />行间</span
+                    ><span class="poetry-process">语料 · 微调 · 生成</span>
+                  </div>
+                  <span class="art-caption">OLD WORDS. NEW POSSIBILITIES.</span>
+                  <span class="work-index" aria-hidden="true">04</span>
+                </div>
+                <div class="work-copy">
+                  <p class="work-category">MODEL FINETUNING / 语言与创作</p>
+                  <h3 id="poetry-title">
+                    <a
+                      href="https://github.com/zhangtuo723/qwen3_poetry_generation"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Qwen3<br />唐诗生成 <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </h3>
+                  <p>
+                    基于 Hugging Face 数据集，对 Qwen3-0.6B 进行 LoRA
+                    微调。探索模型如何学习唐诗风格，让技术与文字的想象力相遇。
+                  </p>
+                  <ul class="work-tags" aria-label="项目技术">
+                    <li>Python</li>
+                    <li>LoRA</li>
+                    <li>Qwen3</li>
+                  </ul>
+                  <div class="work-actions">
+                    <button
+                      class="detail-button"
+                      type="button"
+                      data-work="poetry"
+                      hidden
+                      aria-haspopup="dialog"
+                    >
+                      展开项目 <span aria-hidden="true">↗</span></button
+                    ><a
+                      href="https://github.com/zhangtuo723/qwen3_poetry_generation"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >源码 <span aria-hidden="true">↗</span
+                      ><span class="sr-only">（新窗口）</span></a
+                    >
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="gallery-footer">
+              <a
+                href="https://github.com/zhangtuo723"
+                target="_blank"
+                rel="noopener noreferrer"
+                >更多探索，在 GitHub <span aria-hidden="true">↗</span
+                ><span class="sr-only">（新窗口）</span></a
+              >
+              <div class="gallery-progress" aria-hidden="true">
+                <span data-gallery-progress></span>
+              </div>
+              <span class="gallery-hint" aria-hidden="true"
+                >继续探索 <span>→</span></span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="contact-section"
+        id="contact"
+        aria-labelledby="contact-title"
+      >
+        <p class="section-kicker">GOOD THINGS START WITH A HELLO.</p>
+        <h2 id="contact-title">
+          一起创造<br /><span>一些有意思的事。</span
+          ><i aria-hidden="true">✳</i>
+        </h2>
+        <div class="contact-bottom">
+          <div class="contact-copy">
+            <p>
+              合作、交流，或只是聊聊 Agent 与 LLM。<br />如果你也有一个「不如试试」的想法，欢迎来信。
+            </p>
+            <a class="email-link" href="mailto:1605728334@qq.com"
+              ><span data-email-address>1605728334@qq.com</span>
+              <span aria-hidden="true">↗</span></a
+            ><button
+              class="copy-email"
+              type="button"
+              data-copy-email
+              hidden
+              aria-controls="copy-status"
+            >
+              复制邮箱 <span aria-hidden="true">⧉</span>
+            </button>
+            <p
+              class="copy-status"
+              id="copy-status"
+              data-copy-status
+              role="status"
+              aria-live="polite"
+            ></p>
+          </div>
+          <a
+            class="contact-github"
+            href="https://github.com/zhangtuo723"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub <span aria-hidden="true">↗</span
+            ><span class="sr-only">（新窗口）</span></a
+          >
+        </div>
+        <footer class="site-footer">
+          <a href="#home" class="footer-name"
+            >zhangtuo<span aria-hidden="true">✳</span></a
+          ><span>© 2026 · 以好奇心为起点。</span><a href="#home">回到顶部 ↑</a>
+        </footer>
+      </section>
+    </main>
+
+    <div class="view-controls" aria-label="浏览方式">
+      <button
+        class="view-control"
+        type="button"
+        data-motion-toggle
+        hidden
+        aria-pressed="false"
+        aria-label="开启动态效果"
+      >
+        <span class="control-dot" aria-hidden="true"></span
+        ><span data-motion-label>动态效果</span>
+      </button>
+      <span class="controls-divider" aria-hidden="true"></span>
+      <button
+        class="view-control"
+        type="button"
+        data-view-toggle
+        hidden
+        aria-pressed="false"
+      >
+        <span data-view-label>普通版</span><span aria-hidden="true">↗</span>
+      </button>
     </div>
-  </header>
-
-  <!-- HERO -->
-  <main class="flex-1 flex items-center relative">
-    <section class="max-w-6xl mx-auto px-6 py-20 md:py-32 w-full">
-      <div class="max-w-4xl space-y-8">
-        <!-- Status badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-2 bg-pixel-dark pixel-border">
-          <span class="w-2 h-2 bg-pixel-green animate-pulse"></span>
-          <span class="font-pixel text-[10px] text-pixel-dim">WELCOME_NEW_OPPORTUNITIES</span>
-        </div>
-
-        <h1 class="font-pixel text-2xl md:text-4xl lg:text-5xl leading-relaxed tracking-wide">
-          Hi, I'm <span class="text-pixel-cyan glow-cyan">zhangtuo</span>.
-          <br />
-          <span class="text-pixel-dim text-lg md:text-2xl lg:text-3xl">Agent Engineer</span>
-        </h1>
-
-        <p class="text-xl md:text-2xl text-pixel-dim max-w-2xl leading-relaxed font-body tracking-wide">
-          专注于构建智能 Agent 系统、LLM 应用与自动化工作流。<br />
-          相信代码是思考的杠杆，工具是创造力的放大器。
-        </p>
-
-        <div class="flex flex-wrap gap-4 pt-4">
-          <a href="projects.html" class="pixel-btn inline-block px-6 py-3 bg-pixel-cyan text-pixel-bg font-pixel text-xs pixel-border">
-            &gt; 查看作品
-          </a>
-          <a href="contact.html" class="pixel-btn inline-block px-6 py-3 bg-pixel-dark text-pixel-cyan font-pixel text-xs pixel-border-cyan">
-            &gt; 联系我
-          </a>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-3 gap-4 md:gap-8 pt-12 max-w-xl">
-          <div class="pixel-border bg-pixel-dark p-4 text-center">
-            <div class="font-pixel text-lg md:text-xl text-pixel-cyan">INF</div>
-            <div class="font-pixel text-[8px] text-pixel-dim mt-2">CURIOSITY</div>
-          </div>
-          <div class="pixel-border bg-pixel-dark p-4 text-center">
-            <div class="font-pixel text-lg md:text-xl text-pixel-magenta">24/7</div>
-            <div class="font-pixel text-[8px] text-pixel-dim mt-2">BUILDING</div>
-          </div>
-          <div class="pixel-border bg-pixel-dark p-4 text-center">
-            <div class="font-pixel text-lg md:text-xl text-pixel-gold">v1.0</div>
-            <div class="font-pixel text-[8px] text-pixel-dim mt-2">FOCUS</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="border-t-2 border-pixel-border bg-pixel-dark/50">
-    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="font-pixel text-[8px] text-pixel-dim">© 2026 zhangtuo · Agent 工程师</p>
-      <div class="flex items-center gap-4">
-        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="text-pixel-dim hover:text-pixel-cyan transition font-pixel text-[10px]" aria-label="GitHub">
-          [GITHUB]
-        </a>
-        <a href="mailto:1605728334@qq.com" class="text-pixel-dim hover:text-pixel-cyan transition font-pixel text-[10px]" aria-label="Email">
-          [EMAIL]
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    const btn = document.getElementById('menuBtn');
-    const menu = document.getElementById('mobileMenu');
-    if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-  </script>
-  <script src="bg.js"></script>
-</body>
+    <p class="sr-only" id="view-status" role="status" aria-live="polite"></p>
+    <dialog class="work-dialog" id="work-dialog" aria-label="项目详情">
+      <button
+        class="dialog-close"
+        type="button"
+        data-close-dialog
+        aria-label="关闭项目详情"
+      >
+        关闭 <span aria-hidden="true">×</span>
+      </button>
+      <div id="work-detail"></div>
+    </dialog>
+    <noscript
+      ><p class="noscript-note">
+        你正在浏览静态版本，所有介绍与作品链接均可直接阅读。开启 JavaScript
+        后可体验 3D 场景与项目详情。
+      </p>
+      <style>
+        .view-controls,
+        .detail-button {
+          display: none;
+        }
+      </style></noscript
+    >
+  </body>
 </html>

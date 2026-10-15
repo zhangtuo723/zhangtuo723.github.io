@@ -1,249 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>关于 — zhangtuo</title>
-  <meta name="description" content="关于 zhangtuo · Agent 工程师" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            pixel: ['"Press Start 2P"', 'cursive'],
-            body: ['VT323', 'monospace'],
-          },
-          colors: {
-            pixel: {
-              bg: '#0c0c14',
-              fg: '#c8c8c8',
-              dim: '#6b6b7b',
-              dark: '#1a1a2e',
-              border: '#2a2a3a',
-              cyan: '#00e5ff',
-              magenta: '#ff00a0',
-              gold: '#ffd700',
-              green: '#00ff88',
-            }
-          }
-        },
-      },
-    };
-  </script>
-  <style>
-    body {
-      background-color: #0c0c14;
-      font-family: 'VT323', monospace;
-      image-rendering: pixelated;
-    }
-    html { scroll-behavior: smooth; }
-
-    .scanlines::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15) 0px,
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    .pixel-grid {
-      background-image:
-        linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
-
-    .pixel-border { border: 2px solid #2a2a3a; }
-    .pixel-border-cyan { border: 2px solid #00e5ff; }
-    .pixel-border-magenta { border: 2px solid #ff00a0; }
-
-    .pixel-card {
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .pixel-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #00e5ff;
-      border-color: #00e5ff;
-    }
-
-    .pixel-btn {
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .pixel-btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #00e5ff;
-    }
-    .pixel-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px #00e5ff;
-    }
-
-    .glow-cyan {
-      text-shadow:
-        0 0 4px #00e5ff,
-        0 0 8px #00e5ff;
-    }
-
-    ::selection {
-      background: #00e5ff;
-      color: #0c0c14;
-    }
-
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #0c0c14; }
-    ::-webkit-scrollbar-thumb { background: #2a2a3a; border: 1px solid #00e5ff; }
-    ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
-  </style>
-</head>
-<body class="scanlines text-pixel-fg min-h-screen flex flex-col overflow-x-hidden">
-
-  <!-- Background -->
-  <div class="fixed inset-0 pixel-grid pointer-events-none -z-10"></div>
-  <canvas id="bgCanvas" class="fixed inset-0 -z-[5] pointer-events-none"></canvas>
-
-  <!-- Decorative pixel corner brackets -->
-  <div class="fixed top-4 left-4 w-6 h-6 border-l-2 border-t-2 border-pixel-cyan pointer-events-none z-50"></div>
-  <div class="fixed top-4 right-4 w-6 h-6 border-r-2 border-t-2 border-pixel-cyan pointer-events-none z-50"></div>
-  <div class="fixed bottom-4 left-4 w-6 h-6 border-l-2 border-b-2 border-pixel-cyan pointer-events-none z-50"></div>
-  <div class="fixed bottom-4 right-4 w-6 h-6 border-r-2 border-b-2 border-pixel-cyan pointer-events-none z-50"></div>
-
-  <!-- NAV -->
-  <header class="sticky top-0 z-40 bg-pixel-bg/95 border-b-2 border-pixel-border">
-    <nav class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-3 group">
-        <div class="w-8 h-8 bg-pixel-cyan flex items-center justify-center font-pixel text-pixel-bg text-xs">Z</div>
-        <span class="font-pixel text-xs text-pixel-dim group-hover:text-pixel-cyan transition-colors">zhangtuo</span>
-      </a>
-      <ul class="hidden md:flex items-center gap-6 text-sm font-body tracking-wide">
-        <li><a href="index.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[首页]</a></li>
-        <li><a href="about.html" class="text-pixel-cyan glow-cyan">[关于]</a></li>
-        <li><a href="projects.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[项目]</a></li>
-        <li><a href="contact.html" class="text-pixel-dim hover:text-pixel-cyan transition-colors">[联系]</a></li>
-      </ul>
-      <button id="menuBtn" class="md:hidden text-pixel-cyan font-pixel text-xs" aria-label="Toggle menu">
-        [MENU]
-      </button>
-    </nav>
-    <div id="mobileMenu" class="hidden md:hidden border-t-2 border-pixel-border bg-pixel-dark">
-      <ul class="px-6 py-4 space-y-3 text-sm font-pixel">
-        <li><a href="index.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 首页</a></li>
-        <li><a href="about.html" class="block text-pixel-cyan">&gt; 关于</a></li>
-        <li><a href="projects.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 项目</a></li>
-        <li><a href="contact.html" class="block text-pixel-dim hover:text-pixel-cyan">&gt; 联系</a></li>
-      </ul>
-    </div>
-  </header>
-
-  <!-- ABOUT -->
-  <main class="flex-1">
-    <section class="max-w-4xl mx-auto px-6 py-16 md:py-24">
-      <p class="font-pixel text-[10px] text-pixel-cyan mb-4">// ABOUT</p>
-      <h1 class="font-pixel text-xl md:text-3xl lg:text-4xl leading-relaxed mb-8">
-        构建与你共思的<span class="text-pixel-magenta glow-cyan">智能体</span>。
-      </h1>
-
-      <div class="space-y-5 text-xl text-pixel-dim leading-relaxed font-body tracking-wide">
-        <p>
-          我是 <span class="text-pixel-fg">zhangtuo</span>，一名 Agent 工程师。
-          日常专注于探索 LLM 与工具调用的边界，把"看似魔法"的能力变成稳定可靠的工程系统。
-        </p>
-        <p>
-          相比堆叠新模型，我更着迷于<span class="text-pixel-cyan">系统设计</span>：
-          上下文管理、工具编排、记忆机制、人机协作 —— 这些细节决定了一个 Agent 是 demo 还是 product。
-        </p>
-        <p>
-          闲暇时写写小工具、读硬科幻、跑步。相信好的工具应该让人变得更聪明，而不是更依赖。
-        </p>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section class="max-w-4xl mx-auto px-6 py-16">
-      <p class="font-pixel text-[10px] text-pixel-cyan mb-4">// SKILLS</p>
-      <h2 class="font-pixel text-lg md:text-xl mb-10">技术栈</h2>
-
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div class="pixel-card pixel-border bg-pixel-dark p-4">
-          <h3 class="font-pixel text-[10px] text-pixel-cyan mb-2">LANGUAGES</h3>
-          <p class="text-lg text-pixel-dim font-body">Python · TypeScript · Go</p>
-        </div>
-        <div class="pixel-card pixel-border bg-pixel-dark p-4">
-          <h3 class="font-pixel text-[10px] text-pixel-cyan mb-2">LLM_AGENTS</h3>
-          <p class="text-lg text-pixel-dim font-body">Claude · GPT · LangGraph · MCP</p>
-        </div>
-        <div class="pixel-card pixel-border bg-pixel-dark p-4">
-          <h3 class="font-pixel text-[10px] text-pixel-cyan mb-2">FRAMEWORKS</h3>
-          <p class="text-lg text-pixel-dim font-body">FastAPI · React · Next.js</p>
-        </div>
-        <div class="pixel-card pixel-border bg-pixel-dark p-4">
-          <h3 class="font-pixel text-[10px] text-pixel-cyan mb-2">INFRA</h3>
-          <p class="text-lg text-pixel-dim font-body">Docker · K8s · Postgres · Redis</p>
-        </div>
-        <div class="pixel-card pixel-border bg-pixel-dark p-4">
-          <h3 class="font-pixel text-[10px] text-pixel-cyan mb-2">ML_RAG</h3>
-          <p class="text-lg text-pixel-dim font-body">PyTorch · Embeddings · Vector DB</p>
-        </div>
-        <div class="pixel-card pixel-border bg-pixel-dark p-4">
-          <h3 class="font-pixel text-[10px] text-pixel-cyan mb-2">TOOLS</h3>
-          <p class="text-lg text-pixel-dim font-body">Git · Linux · Vim · Claude Code</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- NOW -->
-    <section class="max-w-4xl mx-auto px-6 py-16 mb-10">
-      <p class="font-pixel text-[10px] text-pixel-cyan mb-4">// NOW</p>
-      <h2 class="font-pixel text-lg md:text-xl mb-6">最近在做什么</h2>
-      <div class="pixel-border bg-pixel-dark p-6">
-        <ul class="space-y-3 text-xl text-pixel-dim font-body">
-          <li class="flex gap-3">
-            <span class="text-pixel-cyan mt-1">&gt;</span>
-            <span>探索多 Agent 协作框架与工具自动发现机制</span>
-          </li>
-          <li class="flex gap-3">
-            <span class="text-pixel-cyan mt-1">&gt;</span>
-            <span>把日常工作流封装成可复用的 Skill 模块</span>
-          </li>
-          <li class="flex gap-3">
-            <span class="text-pixel-cyan mt-1">&gt;</span>
-            <span>读《The Pragmatic Programmer》《Designing Data-Intensive Applications》</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="border-t-2 border-pixel-border bg-pixel-dark/50">
-    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="font-pixel text-[8px] text-pixel-dim">© 2026 zhangtuo · Agent 工程师</p>
-      <div class="flex items-center gap-4">
-        <a href="https://github.com/zhangtuo723" target="_blank" rel="noopener" class="text-pixel-dim hover:text-pixel-cyan transition font-pixel text-[10px]" aria-label="GitHub">
-          [GITHUB]
-        </a>
-        <a href="mailto:1605728334@qq.com" class="text-pixel-dim hover:text-pixel-cyan transition font-pixel text-[10px]" aria-label="Email">
-          [EMAIL]
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    const btn = document.getElementById('menuBtn');
-    const menu = document.getElementById('mobileMenu');
-    if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-  </script>
-  <script src="bg.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content="0; url=index.html#about" />
+    <meta
+      name="description"
+      content="zhangtuo · Agent 工程师的关于页面，已迁移至互动个人主页。"
+    />
+    <link rel="canonical" href="https://zhangtuo723.github.io/#about" />
+    <title>关于 — zhangtuo</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-content: center;
+        background: #e5e9dc;
+        color: #24372e;
+        font:
+          16px/1.8 system-ui,
+          sans-serif;
+        padding: 24px;
+      }
+      a {
+        color: inherit;
+        text-underline-offset: 5px;
+      }
+      a:focus-visible {
+        outline: 2px solid;
+        outline-offset: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>关于 · zhangtuo</h1>
+      <p>内容已迁移到互动个人主页。</p>
+      <a href="index.html#about">前往关于 →</a>
+    </main>
+  </body>
 </html>

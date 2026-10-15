@@ -1,80 +1,60 @@
-# zhangtuo — 个人作品集
+# zhangtuo · 3D 互动个人主页
 
-像素风静态网站，托管于 GitHub Pages。
+面向公开展示的个人简介与作品集。原创卡通开发者角色作为全屏主角，滚动推动镜头与内容章节，作品以可交互画廊展示。
 
-🔗 **在线地址**: https://zhangtuo723.github.io
+网站：https://zhangtuo723.github.io
 
----
+## 本地开发
 
-## 项目简介
-
-这是我的个人作品集网站，展示我的项目、技能和联系方式。
-
-风格采用 **复古像素风** —— 直角边框、纯色配色、CRT 扫描线、Press Start 2P 像素字体，配合 Canvas 像素粒子背景和点击二进制爆炸特效。
-
----
-
-## 技术栈
-
-- **HTML5** — 纯静态页面，无框架
-- **Tailwind CSS (CDN)** — 原子化 CSS，通过 CDN 引入
-- **原生 JavaScript** — Canvas 粒子动画、交互特效
-- **Google Fonts** — Press Start 2P / VT323
-
----
-
-## 页面结构
-
-```
-├── index.html      # 首页 / Hero
-├── about.html      # 关于 / 技能栈
-├── projects.html   # 项目作品
-├── contact.html    # 联系方式
-├── bg.js           # Canvas 像素粒子背景 + 点击特效
-└── README.md       # 本文件
-```
-
----
-
-## 本地运行
-
-无需构建工具，直接用浏览器打开 HTML 文件即可：
+无需安装 Node 依赖或执行构建，在仓库根目录启动静态 HTTP 服务：
 
 ```bash
-# macOS
-open index.html
-
-# 或者启动本地服务器
-python3 -m http.server 8080
-# 然后访问 http://localhost:8080
+python3 -m http.server 8080 --bind 127.0.0.1
 ```
 
----
+通过浏览器访问此服务。Three.js 使用原生 ES 模块，需要 HTTP 服务，不能直接双击 HTML 文件。
 
-## 特色效果
+## 体验与技术
 
-- **像素粒子背景** — Canvas 绘制的 1-2px 方块粒子，带虚线连线
-- **CRT 扫描线** — 全局 CSS 覆盖层模拟复古显示器
-- **点击爆炸** — 鼠标点击时生成 "0" / "1" 二进制字符粒子，带重力下落
-- **像素交互** — 按钮/卡片悬停时有像素级偏移阴影
-- **像素角标** — 页面四角装饰性边框角标
+- **原创 3D 角色**：Three.js 程序化建模，包含眼睛、眼镜、发型与服装；桌面端眼球跟随指针。
+- **滚动叙事**：个人简介、三段能力章节、四个项目和联系方式；镜头由代码关键帧编排。
+- **作品画廊**：桌面滚动驱动画廊横移；手机使用触摸横向浏览；原生 dialog 展示项目详情，支持键盘、ESC 和焦点恢复。
+- **静态阅读**：支持关闭动态效果、系统减少动态效果偏好、普通阅读模式与 WebGL 失败时的静态封面。普通模式也可通过 `?view=plain` 直接访问。
+- **本地资源**：Three.js、字体和压缩后的生成图片随仓库提供，访问本站内容不依赖外部 CDN。
+- **发布**：纯 HTML、CSS 和原生 JavaScript，继续使用 GitHub Pages 的根目录静态部署。没有后端或 API key。
 
----
+普通版和低动态设置保存在浏览器本地；本站没有统计脚本或远程人物服务。
 
-## 项目展示
+## 文件与内容维护
 
-| 项目 | 链接 | 状态 |
-|---|---|---|
-| ForgeKit | [GitHub](https://github.com/zhangtuo723/ForgeKit) / [官网](https://forgekit.cn/zh) | 已上线 |
-| 小红书爆款分析助手 | [GitHub](https://github.com/zhangtuo723/hot_analysis_plugin) | 开源 |
+| 文件                                            | 用途                                         |
+| ----------------------------------------------- | -------------------------------------------- |
+| `index.html`                                    | 简介、能力章节、项目卡片和联系方式           |
+| `styles.css`                                    | 响应式布局、普通阅读与低动态样式             |
+| `site.js`                                       | 导航、滚动映射、作品详情数据、弹窗及阅读设置 |
+| `scene.js`                                      | 渲染器、灯光、滚动镜头、设备适配和资源清理   |
+| `avatar.js`                                     | 原创角色几何、材质与眼球动作                 |
+| `assets/`                                       | 原创生成图、字体、Three.js 与许可声明        |
+| `about.html` / `projects.html` / `contact.html` | 旧页面地址兼容入口                           |
 
----
+修改项目时同步 `index.html` 的卡片与 `site.js` 的 `workData`。当前仅使用原仓库已有的项目和个人信息，没有虚构教育、任职年月或成果指标。
 
-## 联系
+项目封面是概念视觉，不是产品截图。生成的静态卡通人像与实时程序化角色是同一视觉方向下的不同表现，均不代表经过本人照片拟合的肖像。
 
-- 📧 邮箱: 1605728334@qq.com
-- 💻 GitHub: [@zhangtuo723](https://github.com/zhangtuo723)
+## 验证
 
----
+```bash
+node --check site.js
+node --check scene.js
+node --check avatar.js
+```
 
-*© 2026 zhangtuo*
+交互验证需启动静态服务后使用支持 WebGL 的浏览器：检查滚动运镜、四个作品详情、ESC 与关闭后焦点恢复、移动导航和画廊、邮箱复制、普通模式、系统低动态偏好及 WebGL 不可用时的静态展示。运行时还应检查网络请求与控制台，避免遗漏资源。
+
+云端浏览器的手机尺寸模拟不能代替真实手机性能测试。
+
+## 设计参考与素材
+
+互动叙事参考 [dayinji/sen-3d-resume](https://github.com/dayinji/sen-3d-resume) 的「人物主角 + 滚动运镜 + HTML 内容」思路。此版本使用独立编写的原生 Three.js 实现，没有复制作者的人物 GLB、个人履历、品牌素材或环境贴图。
+
+图像由 Codex 生成并压缩为 WebP/JPEG。第三方库和字体的版本、来源及许可证见 [THIRD_PARTY.md](THIRD_PARTY.md)。
