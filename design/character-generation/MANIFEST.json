@@ -1,0 +1,38 @@
+{
+  "status": "design references only; production mesh and facial rig not generated",
+  "source": "Generated with Codex image generation from the selected fictional character concept, 2026-10-15",
+  "primary_view": "front.png",
+  "limitations": "Separate image generations, not calibrated renders of one 3D mesh. Front view is authoritative. Cropped at mid thighs; no full-body rig guarantee.",
+  "files": {
+    "back.png": {
+      "bytes": 2194754,
+      "width": 1024,
+      "height": 1536,
+      "sha256": "5ecba72fa9df786a0b8ac4080e692116185aac197b591938e676dd0ecd69ab83"
+    },
+    "concept.png": {
+      "bytes": 2216780,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "b8b1bcef9fab76c4582c20ecec45a3c350dd3b85f1fad6ea0e30d63899c9615f"
+    },
+    "front.png": {
+      "bytes": 2243914,
+      "width": 1024,
+      "height": 1536,
+      "sha256": "a1c80bdb8230902d37a9d56595ee85c401aa305ab46441bcabbd70508c0e64a5"
+    },
+    "profile-left-facing.png": {
+      "bytes": 1943116,
+      "width": 1024,
+      "height": 1536,
+      "sha256": "efa1e4ba47a00e7cc88a8d7b22098400749e0a6d37d6b9c349a72a5e4bfc0fec"
+    },
+    "three-quarter.png": {
+      "bytes": 2037627,
+      "width": 1024,
+      "height": 1536,
+      "sha256": "dc42904deb92e653a1fed81fd19b41d9e3cf215b959f321a31f87d9f0f9224f3"
+    }
+  }
+}

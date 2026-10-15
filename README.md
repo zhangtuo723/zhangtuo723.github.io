@@ -4,6 +4,8 @@
 
 网站：https://zhangtuo723.github.io
 
+角色重做的参考图、图生 3D 提示词与表情制作规格见 [角色生成输入包](design/character-generation/README.md)。当前已准备素材，专用 3D 生成、造型修整和面部绑定尚待完成。
+
 ## 本地开发
 
 无需安装 Node 依赖或执行构建，在仓库根目录启动静态 HTTP 服务：

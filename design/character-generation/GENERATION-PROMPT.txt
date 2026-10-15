@@ -1,0 +1,25 @@
+通用提示词；按实际服务支持的方式填写，不是特定服务的参数或能力保证。
+优先以 front.png 为唯一图片输入。输出静态网格后仍需修整与面部绑定。
+
+中文：
+根据参考图制作单个自然、有个性的动画电影风成年东亚男性角色。
+保持参考人物的身份、脸型和成熟比例：约28岁，无眼镜、无胡须，黑色露额上扫短发，两侧和后颈较短，自然浓眉、深棕色杏仁眼、圆润而清晰的下颌。
+神态放松，嘴唇自然闭合，双眼正常睁开；不要夸张咧嘴或僵硬地露齿。
+保留深海军蓝开襟工作夹克、象牙白圆领T恤、人物自身左胸单个带橙色布标的胸袋与蓝色牛仔裤。右胸不增加同款口袋。肩颈比例自然，双臂放松下垂，衣服有明确的领口、门襟与厚度。
+优先保证面部、眼睑、嘴唇、头发、颈肩和上半身质量，网页首先使用胸像。不要凭空延长成没有参考的腿脚。
+连续而干净的面部表面，眼球和眼睑结构分明，鼻翼与唇缘完整，发际线自然。需要可用于后续修整、UV与面部表情制作的模型。
+自然动画电影CG材质，皮肤柔和，头发有明确发流，夹克与T恤粗糙度不同；非金属皮肤与布料。避免将图片背景、强光、高光或投影烘死到颜色贴图。
+只制作一个人物，不生成背景、文字、底座或其他物体。
+
+English:
+Create one stylized animated-feature-film adult East Asian male character matching the reference identity and proportions. About 28 years old, natural rounded-square adult face and defined soft jaw, expressive dark brows, dark brown almond eyes, no glasses, no facial hair. Short black textured swept-up hair with visible forehead, tapered sides and a short natural nape.
+Relaxed closed lips with a subtle friendly expression, eyes normally open, no exaggerated grin or exposed teeth. Preserve the open navy canvas work jacket over an ivory crew-neck T-shirt, ONE chest pocket with a small orange fabric tab on the character's own LEFT chest, and blue jeans. No matching pocket on the right chest. Natural neck and shoulder proportions, arms relaxed downward, distinct collar and clothing layers.
+Prioritize the face, eyelids, lips, hair, neck, shoulders and upper torso; the website initially uses a portrait bust. Do not invent unreferenced lower legs or feet from this cropped input.
+Clean continuous facial surfaces with readable eyelid and lip boundaries, controllable eyes, natural hairline, complete forms from front and side. Suitable for subsequent topology cleanup, UV work and facial rigging.
+Soft stylized CGI skin, directional groomed hair, distinct roughness for canvas and cotton, nonmetal skin and cloth. Avoid baked background, strong lighting, highlights or shadows in base color. One character only, no environment, text, pedestal or extra objects.
+
+可选避坑说明 / Optional avoidance notes:
+Only use a separate negative prompt field if the chosen service actually supports it.
+No multiple heads, duplicate faces, merged eyes, fused eyelids, protruding eyeballs, hollow nostrils, open mouth, fixed toothy grin, helmet hair, regular noodle-shaped strands, floating fragments, intersecting collars, paper-thin clothing, mannequin features or childish body proportions.
+
+注意：提示词不能保证服务自动生成合格拓扑、独立眼球或面部绑定。最终以导出模型的实际检查为准，详见 PRODUCTION-BRIEF.md。
