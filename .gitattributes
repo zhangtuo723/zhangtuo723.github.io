@@ -1,0 +1,2 @@
+# Preserve the original indentation of vendored Three.js modules.
+assets/vendor/** whitespace=-space-before-tab

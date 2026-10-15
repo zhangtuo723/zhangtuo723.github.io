@@ -1,264 +1,434 @@
 import * as THREE from "./assets/vendor/three.module.min.js";
-import { createAvatar } from "./avatar.js";
+import { RoomEnvironment } from "./assets/vendor/environments/RoomEnvironment.js";
+import { createWorkshop } from "./workshop.js";
 
-/** Original scroll-directed portrait; all résumé content remains ordinary HTML. */
-export function createScene(host) {
-  const mobileQuery = window.matchMedia(
-    "(max-width: 760px), (pointer: coarse)",
-  );
-  let mobile = mobileQuery.matches;
+/** Render only when useful: motion off retains the same explorable scene. */
+export function createScene(
+  host,
+  { onSelect = () => {}, onHover = () => {} } = {},
+) {
+  const noop = {
+    setMotion() {},
+    setScroll() {},
+    focus() {},
+    runDemo() {},
+    dispose() {},
+    getAnchors() {
+      return {};
+    },
+  };
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: !mobile,
+      antialias: true,
       powerPreference: "low-power",
     });
   } catch {
     host.dataset.state = "fallback";
-    return { setMotion() {}, setScroll() {}, dispose() {} };
+    return noop;
   }
-  renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2),
-  );
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.12;
+  renderer.toneMappingExposure = 0.98;
   renderer.shadowMap.enabled = true;
+  // The architecture is static; cache its shadows instead of redrawing every mesh at 30 fps.
+  renderer.shadowMap.autoUpdate = false;
+  renderer.shadowMap.needsUpdate = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const canvas = renderer.domElement;
   canvas.setAttribute("aria-hidden", "true");
-  canvas.hidden = true;
+  canvas.style.touchAction = "pan-y";
   host.appendChild(canvas);
-
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 40);
-  const avatar = createAvatar();
-  const actor = new THREE.Group();
-  actor.add(avatar.root);
-  scene.add(actor);
-  scene.add(new THREE.HemisphereLight("#fff5e5", "#9ba9a4", 2.1));
-  const key = new THREE.DirectionalLight("#fff7f1", 2.8);
-  key.position.set(-3.8, 6, 6);
-  key.target.position.set(0, 1.3, 0);
+  const workshop = createWorkshop();
+  scene.add(workshop.root);
+  const environment = new RoomEnvironment();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const environmentTarget = pmrem.fromScene(environment, 0.06);
+  scene.environment = environmentTarget.texture;
+  scene.environmentIntensity = 0.7;
+  environment.dispose();
+  pmrem.dispose();
+  scene.add(new THREE.HemisphereLight("#c9e8ff", "#142039", 2.0));
+  const key = new THREE.DirectionalLight("#d8edff", 3.6);
+  key.position.set(-22, 38, 25);
+  key.target.position.set(0, 0, 0);
   key.castShadow = true;
-  key.shadow.mapSize.set(mobile ? 1024 : 2048, mobile ? 1024 : 2048);
-  key.shadow.camera.left = -3;
-  key.shadow.camera.right = 3;
-  key.shadow.camera.top = 4;
-  key.shadow.camera.bottom = -3;
-  key.shadow.camera.near = 0.1;
-  key.shadow.camera.far = 16;
-  key.shadow.bias = -0.0003;
-  key.shadow.normalBias = 0.015;
-  key.shadow.radius = 4;
+  key.shadow.mapSize.set(1024, 1024);
+  Object.assign(key.shadow.camera, {
+    left: -34,
+    right: 34,
+    top: 34,
+    bottom: -31,
+    near: 0.1,
+    far: 120,
+  });
+  key.shadow.normalBias = 0.025;
+  key.shadow.bias = -0.00015;
   scene.add(key, key.target);
-  const fill = new THREE.DirectionalLight("#d8e8ee", 1.65);
-  fill.position.set(4.5, 2.7, 4);
+  const fill = new THREE.DirectionalLight("#49baff", 1.15);
+  fill.position.set(18, 14, -12);
   scene.add(fill);
-  const rim = new THREE.DirectionalLight("#edf3cf", 2.6);
-  rim.position.set(2, 4, -3);
-  scene.add(rim);
-
-  // Each stop belongs to a content section; no camera animation asset is needed.
-  const desktopStops = [
-    { p: 0, pos: [0, 1.62, 7.55], target: [0, 1.14, 0], turn: -0.035 },
-    { p: 0.12, pos: [0.4, 1.68, 7.55], target: [0, 1.2, 0], turn: -0.09 },
-    { p: 0.22, pos: [1.4, 1.72, 7.5], target: [1.25, 1.05, 0], turn: -0.17 },
-    { p: 0.4, pos: [1.1, 1.92, 7.9], target: [1.28, 0.98, 0], turn: 0.08 },
-    { p: 0.55, pos: [0.4, 1.7, 8.2], target: [1.3, 1.08, 0], turn: 0.18 },
-    { p: 0.62, pos: [0, 1.7, 10.1], target: [2.9, 1, 0], turn: -0.08 },
-    { p: 0.87, pos: [-0.8, 1.7, 10.8], target: [3.1, 0.9, 0], turn: -0.22 },
-    { p: 1, pos: [0.65, 1.7, 8.7], target: [1.55, 0.95, 0], turn: -0.09 },
-  ];
-  const mobileStops = [
-    { p: 0, pos: [0, 1.75, 10.9], target: [0, 0.98, 0], turn: -0.035 },
-    { p: 0.12, pos: [0, 1.75, 11.1], target: [0, 1.1, 0], turn: -0.08 },
-    { p: 0.22, pos: [0.4, 1.8, 11.8], target: [0.64, 1.6, 0], turn: -0.13 },
-    { p: 0.55, pos: [-0.1, 1.8, 12.7], target: [0.7, 1.7, 0], turn: 0.09 },
-    { p: 0.62, pos: [0, 1.9, 15.6], target: [1.75, 1.3, 0], turn: -0.08 },
-    { p: 0.87, pos: [-0.6, 1.8, 16.3], target: [1.7, 1.2, 0], turn: -0.18 },
-    { p: 1, pos: [0, 1.8, 12.4], target: [0.68, 1.4, 0], turn: -0.08 },
-  ];
-  let enabled = false,
+  const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 320);
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  const mobileQuery = window.matchMedia("(max-width: 760px)");
+  let mobile = mobileQuery.matches;
+  let motion = false,
     disposed = false,
-    contextLost = false,
-    visible = true;
+    visible = true,
+    contextLost = false;
   let frame = 0,
-    previousTime = 0,
+    lastFrame = 0,
     time = 0,
-    scroll = 0,
-    currentScroll = 0;
-  const pointer = { x: 0, y: 0 };
+    lastTime = 0,
+    selected = "overview";
+  let demoStart = null,
+    progress = 0,
+    hover = null,
+    needsRender = true;
+  const parallax = new THREE.Vector2();
   const target = new THREE.Vector3();
-  const desiredPosition = new THREE.Vector3();
-  const desiredTarget = new THREE.Vector3();
-  const stopPosition = new THREE.Vector3();
-  const stopTarget = new THREE.Vector3();
-  let initialPose = true;
-
-  function pose(progress, snap = false) {
-    const stops = mobile ? mobileStops : desktopStops;
-    let a = stops[0],
-      b = stops[stops.length - 1];
-    for (let i = 1; i < stops.length; i++) {
-      if (progress <= stops[i].p) {
-        a = stops[i - 1];
-        b = stops[i];
-        break;
-      }
+  const goalTarget = new THREE.Vector3();
+  const goalPosition = new THREE.Vector3();
+  let cameraReady = false;
+  const cameraStops = [
+    {
+      p: 0,
+      target: [0, 3, 0],
+      distance: 100,
+      side: 0.32,
+      azimuth: 38,
+      elevation: 40,
+    },
+    {
+      p: 0.15,
+      target: [0, 3.6, -0.8],
+      distance: 29,
+      side: -0.38,
+      azimuth: 20,
+      elevation: 28,
+    },
+    {
+      p: 0.3,
+      target: [-12, 3.8, -9],
+      distance: 26,
+      side: -0.38,
+      azimuth: 30,
+      elevation: 32,
+    },
+    {
+      p: 0.48,
+      target: [10, 4.2, -8],
+      distance: 31,
+      side: -0.38,
+      azimuth: -32,
+      elevation: 38,
+    },
+    {
+      p: 0.66,
+      target: [12, 3, 7],
+      distance: 25,
+      side: -0.38,
+      azimuth: -45,
+      elevation: 35,
+    },
+    {
+      p: 0.83,
+      target: [-12, 2.8, 9],
+      distance: 25,
+      side: -0.38,
+      azimuth: 35,
+      elevation: 43,
+    },
+    {
+      p: 1,
+      target: [0, 3, 0],
+      distance: 100,
+      side: -0.26,
+      azimuth: 28,
+      elevation: 40,
+    },
+  ];
+  let focusOverride = null;
+  const lookRight = new THREE.Vector3();
+  const baseTarget = new THREE.Vector3();
+  function pose(snap = false, elapsed = 1 / 30) {
+    const aspect = camera.aspect;
+    let a = cameraStops[0],
+      b = cameraStops[1];
+    for (let i = 1; i < cameraStops.length; i++) {
+      a = cameraStops[i - 1];
+      b = cameraStops[i];
+      if (progress <= b.p) break;
     }
-    let t = THREE.MathUtils.clamp(
-      (progress - a.p) / Math.max(b.p - a.p, 0.001),
-      0,
-      1,
+    let blend = THREE.MathUtils.clamp((progress - a.p) / (b.p - a.p), 0, 1);
+    blend = blend * blend * (3 - 2 * blend);
+    baseTarget.fromArray(a.target).lerp(new THREE.Vector3(...b.target), blend);
+    let distance = THREE.MathUtils.lerp(a.distance, b.distance, blend);
+    let side = THREE.MathUtils.lerp(a.side, b.side, blend);
+    if (focusOverride === "overview") {
+      baseTarget.set(0, 3, 0);
+      distance = 96;
+      side = -0.1;
+    }
+    if (focusOverride && workshop.stations.has(focusOverride)) {
+      baseTarget.copy(workshop.stations.get(focusOverride).target);
+      distance = 26;
+      side = -0.38;
+    }
+    const azimuth = THREE.MathUtils.degToRad(
+      THREE.MathUtils.lerp(a.azimuth, b.azimuth, blend),
     );
-    t = t * t * (3 - 2 * t);
-    desiredPosition.fromArray(a.pos).lerp(stopPosition.fromArray(b.pos), t);
-    desiredTarget.fromArray(a.target).lerp(stopTarget.fromArray(b.target), t);
-    // Keep the portrait framing consistent on compact desktop windows.
-    if (!mobile && camera.aspect < 1.25) desiredPosition.z *= 1.15;
-    if (snap || initialPose) {
-      camera.position.copy(desiredPosition);
-      target.copy(desiredTarget);
-      initialPose = false;
-    } else {
-      camera.position.lerp(desiredPosition, 0.1);
-      target.lerp(desiredTarget, 0.1);
+    let elevation = THREE.MathUtils.degToRad(
+      THREE.MathUtils.lerp(a.elevation, b.elevation, blend),
+    );
+    if (mobile) elevation = Math.max(elevation, THREE.MathUtils.degToRad(38));
+    const direction = new THREE.Vector3(
+      Math.sin(azimuth) * Math.cos(elevation),
+      Math.sin(elevation),
+      Math.cos(azimuth) * Math.cos(elevation),
+    );
+    if (mobile) {
+      // A dedicated elevated portrait view keeps all four stations in the upper scene.
+      side = 0;
+      distance = Math.max(
+        distance * 1.22,
+        (progress < 0.08 || progress > 0.94 ? 96 : 25) / Math.max(0.45, aspect),
+      );
+    } else distance = Math.max(distance, (progress < 0.08 ? 50 : 18) / aspect);
+    goalTarget.copy(baseTarget);
+    goalPosition.copy(baseTarget).addScaledVector(direction, distance);
+    lookRight.set(direction.z, 0, -direction.x).normalize();
+    const halfWidth =
+      distance * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * aspect;
+    goalTarget.addScaledVector(lookRight, -side * halfWidth);
+    goalPosition.addScaledVector(lookRight, -side * halfWidth);
+    if (mobile) {
+      // Shift the physical scene up, leaving a calm lower area for the HTML chapter card.
+      goalTarget.y -= distance * 0.115;
+      goalPosition.y -= distance * 0.115;
     }
-    actor.rotation.y = THREE.MathUtils.lerp(a.turn, b.turn, t);
+    if (motion && !mobile) {
+      goalPosition.x += parallax.x * 0.24;
+      goalPosition.y -= parallax.y * 0.14;
+    }
+    if (!cameraReady || snap || !motion) {
+      camera.position.copy(goalPosition);
+      target.copy(goalTarget);
+      cameraReady = true;
+    } else {
+      const follow = 1 - Math.exp(-Math.min(elapsed, 0.2) * 7);
+      camera.position.lerp(goalPosition, follow);
+      target.lerp(goalTarget, follow);
+    }
     camera.lookAt(target);
   }
   function render(now) {
     frame = 0;
-    if (!enabled || disposed || contextLost || !visible || document.hidden)
+    if (disposed || contextLost || !visible || document.hidden) return;
+    if (motion && now - lastFrame < 1000 / 30) {
+      frame = requestAnimationFrame(render);
       return;
-    frame = requestAnimationFrame(render);
-    if (now - previousTime < 1000 / 30) return;
-    const elapsed = previousTime ? Math.min((now - previousTime) / 1000, 1) : 0;
-    const delta = Math.min(elapsed, 0.08);
-    previousTime = now;
-    time += delta;
-    currentScroll = THREE.MathUtils.lerp(
-      currentScroll,
-      scroll,
-      1 - Math.exp(-elapsed * 8),
-    );
-    pose(currentScroll, true);
-    avatar.update({ x: pointer.x, y: pointer.y, time, follow: !mobile });
+    }
+    const elapsed = lastTime ? Math.min(0.5, (now - lastTime) / 1000) : 1 / 30;
+    const delta = Math.min(0.08, elapsed);
+    lastTime = now;
+    lastFrame = now;
+    if (motion) time += delta;
+    const demo =
+      demoStart === null ? null : Math.min(1, (now - demoStart) / 5000);
+    pose(!motion, elapsed);
+    workshop.update(time, demo, motion);
     try {
       renderer.render(scene, camera);
-      if (host.dataset.state !== "live") {
-        canvas.hidden = false;
-        host.dataset.state = "live";
-      }
+      canvas.hidden = false;
+      host.dataset.state = "live";
+      needsRender = false;
     } catch {
-      enabled = false;
-      canvas.hidden = true;
       host.dataset.state = "fallback";
-      cancelAnimationFrame(frame);
-      frame = 0;
+      motion = false;
+      return;
     }
-  }
-  function syncAnimation() {
-    cancelAnimationFrame(frame);
-    frame = 0;
-    previousTime = 0;
-    if (enabled && !disposed && !contextLost && visible && !document.hidden)
+    if (demo === 1) {
+      demoStart = null;
+      workshop.update(time, null, motion);
+      needsRender = true;
+    }
+    if (motion || needsRender || demoStart !== null)
       frame = requestAnimationFrame(render);
   }
-  function onPointer(event) {
-    if (mobile || event.pointerType === "touch") return;
-    pointer.x = THREE.MathUtils.clamp(
-      (event.clientX / window.innerWidth) * 2 - 1,
-      -1,
-      1,
-    );
-    pointer.y = THREE.MathUtils.clamp(
-      (event.clientY / window.innerHeight) * 2 - 1,
-      -1,
-      1,
-    );
+  function invalidate() {
+    needsRender = true;
+    if (!frame && !disposed && !contextLost && visible && !document.hidden)
+      frame = requestAnimationFrame(render);
   }
-  function resetPointer() {
-    pointer.x = 0;
-    pointer.y = 0;
+  workshop.ready?.then(() => {
+    if (!disposed) invalidate();
+  });
+  function sync() {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    lastTime = 0;
+    invalidate();
   }
-  window.addEventListener("pointermove", onPointer, { passive: true });
-  window.addEventListener("blur", resetPointer);
-  document.documentElement.addEventListener("pointerleave", resetPointer);
-  document.addEventListener("visibilitychange", syncAnimation);
   function resize() {
     if (disposed || contextLost) return;
     mobile = mobileQuery.matches;
     const width = Math.max(1, host.clientWidth),
       height = Math.max(1, host.clientHeight);
-    renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2),
-    );
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    pose(currentScroll, true);
+    renderer.shadowMap.needsUpdate = true;
+    pose(true);
+    invalidate();
   }
-  const resizeObserver = new ResizeObserver(resize);
-  resizeObserver.observe(host);
-  const visibilityObserver = new IntersectionObserver((entries) => {
-    visible = entries[0]?.isIntersecting ?? true;
-    syncAnimation();
-  });
-  visibilityObserver.observe(host);
-  function onContextLost(event) {
+  function projectAt(event) {
+    const rect = canvas.getBoundingClientRect();
+    pointer.set(
+      ((event.clientX - rect.left) / rect.width) * 2 - 1,
+      (-(event.clientY - rect.top) / rect.height) * 2 + 1,
+    );
+    raycaster.setFromCamera(pointer, camera);
+    return (
+      raycaster.intersectObjects(workshop.pickables, false)[0]?.object.userData
+        .project || null
+    );
+  }
+  function setHover(id) {
+    if (hover === id) return;
+    hover = id;
+    canvas.style.cursor = id ? "pointer" : "default";
+    onHover(id);
+    workshop.setActive(id || (selected === "overview" ? null : selected));
+    invalidate();
+  }
+  function onPointerMove(event) {
+    setHover(projectAt(event));
+    if (motion && !mobile && event.pointerType !== "touch") {
+      parallax.copy(pointer);
+      invalidate();
+    }
+  }
+  function onLeave() {
+    setHover(null);
+    parallax.set(0, 0);
+    invalidate();
+  }
+  let pointerDown = null;
+  function onDown(event) {
+    pointerDown = [event.clientX, event.clientY];
+  }
+  function onClick(event) {
+    if (
+      pointerDown &&
+      Math.hypot(
+        event.clientX - pointerDown[0],
+        event.clientY - pointerDown[1],
+      ) > 8
+    )
+      return;
+    const id = projectAt(event);
+    if (id) onSelect(id);
+  }
+  canvas.addEventListener("pointermove", onPointerMove, { passive: true });
+  canvas.addEventListener("pointerleave", onLeave);
+  canvas.addEventListener("pointerdown", onDown, { passive: true });
+  canvas.addEventListener("click", onClick);
+  function onLost(event) {
     event.preventDefault();
     contextLost = true;
     canvas.hidden = true;
     host.dataset.state = "fallback";
-    syncAnimation();
+    cancelAnimationFrame(frame);
+    frame = 0;
   }
-  function onContextRestored() {
+  function onRestored() {
     contextLost = false;
+    renderer.shadowMap.needsUpdate = true;
     resize();
-    syncAnimation();
+    sync();
   }
-  canvas.addEventListener("webglcontextlost", onContextLost);
-  canvas.addEventListener("webglcontextrestored", onContextRestored);
+  canvas.addEventListener("webglcontextlost", onLost);
+  canvas.addEventListener("webglcontextrestored", onRestored);
+  document.addEventListener("visibilitychange", sync);
+  const resizeObserver = new ResizeObserver(resize);
+  resizeObserver.observe(host);
+  const observer = new IntersectionObserver((entries) => {
+    visible = entries[0]?.isIntersecting ?? true;
+    sync();
+  });
+  observer.observe(host);
   resize();
-  function setMotion(value) {
-    if (disposed) return;
-    enabled = Boolean(value);
-    if (!enabled || contextLost) {
-      canvas.hidden = true;
-      host.dataset.state = contextLost ? "fallback" : "poster";
-    }
-    syncAnimation();
+  function focus(id = "overview") {
+    selected = workshop.stations.has(id) ? id : "overview";
+    focusOverride = selected;
+    workshop.setActive(selected === "overview" ? null : selected);
+    invalidate();
   }
-  function setScroll(progress) {
-    if (disposed || !Number.isFinite(progress)) return;
-    scroll = THREE.MathUtils.clamp(progress, 0, 1);
-    if (!enabled) {
-      currentScroll = scroll;
-      pose(scroll, true);
+  function setMotion(value) {
+    motion = Boolean(value);
+    if (!motion) {
+      demoStart = null;
+      parallax.set(0, 0);
+      workshop.update(time, null, false);
     }
+    sync();
+  }
+  function setScroll(value) {
+    if (!Number.isFinite(value)) return;
+    progress = THREE.MathUtils.clamp(value, 0, 1);
+    focusOverride = null;
+    invalidate();
+  }
+  function runDemo() {
+    // Explicit user action also works with reduced motion as one static completed state.
+    if (!motion) {
+      workshop.update(time, 0.98, false);
+      pose(true);
+      renderer.render(scene, camera);
+      return;
+    }
+    focus("overview");
+    demoStart = performance.now();
+    invalidate();
+  }
+  function getAnchors() {
+    const rect = canvas.getBoundingClientRect();
+    const anchors = {};
+    for (const [id, station] of workshop.stations) {
+      const p = station.target.clone().project(camera);
+      anchors[id] = {
+        x: ((p.x + 1) / 2) * rect.width,
+        y: ((1 - p.y) / 2) * rect.height,
+      };
+    }
+    return anchors;
   }
   function dispose() {
     if (disposed) return;
     disposed = true;
     cancelAnimationFrame(frame);
     resizeObserver.disconnect();
-    visibilityObserver.disconnect();
-    window.removeEventListener("pointermove", onPointer);
-    window.removeEventListener("blur", resetPointer);
-    document.documentElement.removeEventListener("pointerleave", resetPointer);
-    document.removeEventListener("visibilitychange", syncAnimation);
-    canvas.removeEventListener("webglcontextlost", onContextLost);
-    canvas.removeEventListener("webglcontextrestored", onContextRestored);
-    avatar.dispose();
+    observer.disconnect();
+    canvas.removeEventListener("pointermove", onPointerMove);
+    canvas.removeEventListener("pointerleave", onLeave);
+    canvas.removeEventListener("pointerdown", onDown);
+    canvas.removeEventListener("click", onClick);
+    canvas.removeEventListener("webglcontextlost", onLost);
+    canvas.removeEventListener("webglcontextrestored", onRestored);
+    document.removeEventListener("visibilitychange", sync);
+    workshop.dispose();
+    environmentTarget.dispose();
     key.shadow.dispose();
     renderer.renderLists.dispose();
     renderer.dispose();
     canvas.remove();
     host.dataset.state = "poster";
   }
-  return { setMotion, setScroll, dispose };
+  return { setMotion, setScroll, focus, runDemo, dispose, getAnchors };
 }

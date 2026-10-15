@@ -1,7 +1,10 @@
 (() => {
   "use strict";
   const root = document.documentElement;
-  const clamp = (n, min = 0, max = 1) => Math.min(max, Math.max(min, n));
+  const host = document.getElementById("world-scene");
+  const dialog = document.getElementById("work-dialog");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const clamp = (n, a = 0, b = 1) => Math.min(b, Math.max(a, n));
   const read = (key) => {
     try {
       return localStorage.getItem(key);
@@ -16,21 +19,40 @@
       /* Optional storage. */
     }
   };
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const motionButton = document.querySelector("[data-motion-toggle]");
   const viewButton = document.querySelector("[data-view-toggle]");
-  const host = document.getElementById("portrait-scene");
+  const demoButton = document.querySelector("[data-run-demo]");
+  const demoStatus = document.querySelector("[data-demo-status]");
+  const sceneLabel = document.querySelector("[data-scene-label]");
+  const sceneProgress = document.querySelector("[data-scene-progress]");
+  const stepNumber = document.querySelector("[data-step-number]");
+  const menuButton = document.querySelector("[data-menu-toggle]");
+  const navigation = document.querySelector("[data-navigation]");
+  const chapters = [...document.querySelectorAll("[data-scene-step]")];
+  const labels = {
+    home: "AI 科技工厂 · 总览",
+    about: "中央调度 · 关于我",
+    forgekit: "工具生产区 · ForgeKit",
+    analysis: "数据分析区 · 内容洞察",
+    flappy: "机器人实验区 · 强化学习",
+    poetry: "模型创作区 · 唐诗生成",
+    contact: "新的想法 · 从这里开始",
+  };
   let preference = read("resume-motion");
   let plain =
     new URLSearchParams(location.search).get("view") === "plain" ||
     read("resume-view") === "plain";
-  let motion = false;
-  let scene, scenePromise, tick;
-  let sceneRunning = false;
-  let active = true;
+  let motion = false,
+    active = true,
+    scene,
+    scenePromise,
+    sceneRunning = null,
+    frame = 0,
+    stops = [],
+    currentStep = "home",
+    hoverStep = null,
+    demoTimer = 0;
 
-  const menuButton = document.querySelector("[data-menu-toggle]");
-  const navigation = document.querySelector("[data-navigation]");
   function setMenu(open) {
     if (!menuButton || !navigation) return;
     navigation.classList.toggle("is-open", open);
@@ -41,24 +63,21 @@
     );
   }
   if (menuButton && navigation) {
-    menuButton.hidden = false;
     root.classList.add("has-js");
+    menuButton.hidden = false;
     menuButton.addEventListener("click", () =>
       setMenu(menuButton.getAttribute("aria-expanded") !== "true"),
     );
-    navigation.addEventListener("click", (e) => {
-      if (e.target.closest("a")) setMenu(false);
+    navigation.addEventListener("click", (event) => {
+      if (event.target.closest("a")) setMenu(false);
     });
-    document.addEventListener("click", (e) => {
-      if (
-        !e.target.closest("[data-navigation]") &&
-        !e.target.closest("[data-menu-toggle]")
-      )
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest("[data-navigation], [data-menu-toggle]"))
         setMenu(false);
     });
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (event) => {
       if (
-        e.key === "Escape" &&
+        event.key === "Escape" &&
         menuButton.getAttribute("aria-expanded") === "true"
       ) {
         setMenu(false);
@@ -69,145 +88,143 @@
       setMenu(false),
     );
   }
-
-  const gallery = document.querySelector("[data-gallery]");
-  const track = document.querySelector("[data-gallery-track]");
-  let distance = 0,
-    enhanced = false;
-  function measureGallery() {
-    if (!gallery || !track) return;
-    gallery.dataset.enhanced = "false";
-    track.style.removeProperty("--gallery-x");
-    gallery.style.removeProperty("--gallery-distance");
-    distance = Math.max(0, track.scrollWidth - track.clientWidth);
-    enhanced = motion && !plain && innerWidth >= 900 && distance > 1;
-    gallery.dataset.enhanced = String(enhanced);
-    gallery.style.setProperty(
-      "--gallery-distance",
-      `${enhanced ? distance : 0}px`,
-    );
-    if (enhanced) track.scrollLeft = 0;
+  function measure() {
+    const maximum = Math.max(1, root.scrollHeight - innerHeight);
+    stops = chapters.map((element) => ({
+      element,
+      id: element.id,
+      p: Number(element.dataset.progress),
+      top: clamp(element.getBoundingClientRect().top + scrollY, 0, maximum),
+    }));
     updateScroll();
   }
   function getProgress() {
-    const y = scrollY;
-    const top = (id, fallback) => {
-      const el = document.getElementById(id);
-      return el ? el.getBoundingClientRect().top + y : fallback;
-    };
-    const journey = Math.max(1, top("journey", innerHeight));
-    const works = Math.max(
-      journey + 1,
-      top("works", journey + innerHeight * 2),
-    );
-    const contact = Math.max(works + 1, top("contact", works + innerHeight));
-    const end = Math.max(contact + 1, root.scrollHeight - innerHeight);
-    const stops = [
-      [0, 0],
-      [journey, 0.22],
-      [works, 0.62],
-      [contact, 0.9],
-      [end, 1],
-    ];
+    if (!stops.length) return 0;
     for (let i = 1; i < stops.length; i++) {
-      if (y <= stops[i][0])
+      if (scrollY <= stops[i].top) {
+        const a = stops[i - 1],
+          b = stops[i];
         return (
-          stops[i - 1][1] +
-          clamp((y - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0])) *
-            (stops[i][1] - stops[i - 1][1])
+          a.p +
+          clamp((scrollY - a.top) / Math.max(1, b.top - a.top)) * (b.p - a.p)
         );
+      }
     }
-    return 1;
+    return stops.at(-1).p;
   }
-  function updateScroll() {
-    tick = 0;
-    const progress = getProgress();
-    scene?.setScroll(progress);
-    root.style.setProperty(
-      "--hero-opacity",
-      String(plain ? 1 : clamp(1 - scrollY / Math.max(1, innerHeight * 0.65))),
-    );
-    const worksTop =
-      document.getElementById("works")?.getBoundingClientRect().top ?? Infinity;
-    const contactTop =
-      document.getElementById("contact")?.getBoundingClientRect().top ??
-      Infinity;
-    document.body.dataset.phase =
-      contactTop <= 80
-        ? "contact"
-        : worksTop <= 80
-          ? "works"
-          : progress < 0.18
-            ? "hero"
-            : "journey";
-    const shouldRun = motion && !plain && worksTop > 0;
-    if (scene && sceneRunning !== shouldRun) {
+  function updateLabel() {
+    if (sceneLabel)
+      sceneLabel.textContent = labels[hoverStep || currentStep] || labels.home;
+  }
+  function syncSceneMotion() {
+    const covered =
+      document.getElementById("contact")?.getBoundingClientRect().top <= 100;
+    const shouldRun = motion && !plain && !dialog?.open && !covered;
+    if (scene && shouldRun !== sceneRunning) {
       sceneRunning = shouldRun;
       scene.setMotion(shouldRun);
     }
-    root.style.setProperty("--scroll-progress", String(progress));
-    if (!gallery || !track) return;
-    let fraction;
-    if (enhanced) {
-      fraction = clamp(
-        -gallery.getBoundingClientRect().top /
-          Math.max(1, gallery.offsetHeight - innerHeight),
-      );
-      track.style.setProperty("--gallery-x", `${-fraction * distance}px`);
-    } else
-      fraction = clamp(
-        track.scrollLeft / Math.max(1, track.scrollWidth - track.clientWidth),
-      );
-    const indicator = document.querySelector("[data-gallery-progress]");
-    if (indicator) indicator.style.transform = `scaleX(${fraction})`;
   }
-  const queueScroll = () => {
-    if (!tick) tick = requestAnimationFrame(updateScroll);
-  };
-  window.addEventListener("scroll", queueScroll, { passive: true });
-  track?.addEventListener("scroll", queueScroll, { passive: true });
-  window.addEventListener("resize", measureGallery);
-  window.addEventListener("load", measureGallery, { once: true });
-  document.fonts?.ready.then(measureGallery);
-  track?.addEventListener("focusin", (event) => {
-    if (!enhanced) return;
-    const card = event.target.closest(
-      ".work-card, .project-card, [data-work-card]",
+  function updateScroll() {
+    frame = 0;
+    const progress = getProgress();
+    scene?.setScroll(progress);
+    root.style.setProperty("--scroll-progress", String(progress));
+    if (sceneProgress) sceneProgress.style.transform = `scaleX(${progress})`;
+    const near = Math.min(
+      stops.length - 1,
+      Math.max(
+        0,
+        stops.reduce(
+          (index, stop, i) =>
+            scrollY + innerHeight * 0.38 >= stop.top ? i : index,
+          0,
+        ),
+      ),
     );
-    if (!card) return;
-    const bounds = card.getBoundingClientRect();
-    if (bounds.left >= 0 && bounds.right <= innerWidth) return;
-    const fraction = clamp(
-      (bounds.left - track.getBoundingClientRect().left) /
-        Math.max(1, distance),
+    currentStep = stops[near]?.id || "home";
+    document.body.dataset.phase = currentStep;
+    chapters.forEach((chapter) =>
+      chapter.classList.toggle("is-active", chapter.id === currentStep),
     );
-    window.scrollTo({
-      top:
-        gallery.getBoundingClientRect().top +
-        scrollY +
-        fraction * Math.max(1, gallery.offsetHeight - innerHeight),
-      behavior: "instant",
+    document.querySelectorAll("[data-station]").forEach((button) => {
+      if (button.dataset.station === currentStep)
+        button.setAttribute("aria-current", "step");
+      else button.removeAttribute("aria-current");
+    });
+    if (stepNumber)
+      stepNumber.textContent = `${String(near + 1).padStart(2, "0")} / ${String(chapters.length).padStart(2, "0")}`;
+    syncSceneMotion();
+    updateLabel();
+  }
+  function queueScroll() {
+    if (!frame) frame = requestAnimationFrame(updateScroll);
+  }
+  function goTo(id) {
+    const element = document.getElementById(id);
+    if (!element) return;
+    const top = element.getBoundingClientRect().top + scrollY;
+    window.scrollTo({ top, behavior: motion && !plain ? "smooth" : "instant" });
+    setMenu(false);
+  }
+  document.querySelectorAll("[data-station]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      goTo(button.dataset.station);
     });
   });
-
   async function ensureScene() {
-    if (!host || !active) return;
-    if (!scenePromise)
+    if (!host || !active || plain || !motion) return;
+    if (!scenePromise) {
       scenePromise = import("./scene.js")
-        .then(({ createScene }) => {
-          if (active) scene = createScene(host);
+        .then(async ({ createScene }) => {
+          if (!active || plain || !motion) return;
+          const controller = await createScene(host, {
+            onSelect: (id) => goTo(id),
+            onHover: (id) => {
+              hoverStep = id;
+              updateLabel();
+            },
+          });
+          if (!active) {
+            controller.dispose();
+            return;
+          }
+          scene = controller;
+          sceneRunning = null;
+          scene.setScroll(getProgress());
+          syncSceneMotion();
         })
         .catch(() => {
           host.dataset.state = "fallback";
         });
+    }
     await scenePromise;
-    scene?.setScroll(getProgress());
-    updateScroll();
+    if (!scene) scenePromise = null;
+    updateDemoButton();
+  }
+  function updateDemoButton() {
+    if (demoButton)
+      demoButton.disabled =
+        !scene ||
+        !motion ||
+        plain ||
+        Boolean(demoTimer) ||
+        host?.dataset.state === "fallback";
+  }
+  function stopDemo() {
+    clearTimeout(demoTimer);
+    demoTimer = 0;
+    demoButton?.removeAttribute("aria-busy");
+    if (demoStatus)
+      demoStatus.textContent = "本地流程演示，不发起真实模型请求。";
+    updateDemoButton();
   }
   function applyPreferences() {
     motion = preference === "on" || (preference !== "off" && !reduced.matches);
     root.dataset.motion = motion ? "on" : "off";
     root.dataset.view = plain ? "plain" : "immersive";
+    if (demoButton) demoButton.hidden = false;
     if (motionButton) {
       motionButton.hidden = false;
       motionButton.setAttribute("aria-pressed", String(motion));
@@ -227,11 +244,10 @@
         ?.replaceChildren(plain ? "进入 3D 版" : "阅读普通版");
     }
     if (motion && !plain) ensureScene();
-    else {
-      scene?.setMotion(false);
-      sceneRunning = false;
-    }
-    measureGallery();
+    else stopDemo();
+    syncSceneMotion();
+    updateDemoButton();
+    requestAnimationFrame(measure);
   }
   motionButton?.addEventListener("click", () => {
     preference = motion ? "off" : "on";
@@ -243,8 +259,20 @@
     save("resume-view", plain ? "plain" : "immersive");
     applyPreferences();
   });
+  demoButton?.addEventListener("click", () => {
+    if (!scene || !motion || plain || demoTimer) return;
+    scene.runDemo?.();
+    demoButton.setAttribute("aria-busy", "true");
+    if (demoStatus)
+      demoStatus.textContent = "演示中：任务 → 工具编排 → 内容分析 → 报告。";
+    demoTimer = setTimeout(stopDemo, 5200);
+    updateDemoButton();
+  });
+  window.addEventListener("scroll", queueScroll, { passive: true });
+  window.addEventListener("resize", measure, { passive: true });
+  window.addEventListener("load", measure, { once: true });
+  document.fonts?.ready.then(measure);
   reduced.addEventListener("change", applyPreferences);
-  applyPreferences();
 
   const workData = {
     forgekit: {
@@ -327,26 +355,29 @@
       ],
     },
   };
-  const dialog = document.getElementById("work-dialog");
   let returnFocus,
     previousOverflow = "";
-  const closeDialog = () => {
+  function closeDialog() {
     if (dialog?.open) dialog.close();
-  };
+  }
+  function openWork(id, source) {
+    const data = workData[id],
+      detail = document.getElementById("work-detail");
+    if (!dialog || !detail || !data) return;
+    returnFocus = source;
+    detail.innerHTML = `<p class="detail-category">${data.category}</p><h2 id="work-title">${data.title}</h2><p class="detail-intro">${data.intro}</p>${data.image ? `<figure><img src="${data.image}" alt="${data.alt}" width="1536" height="1024"><figcaption>项目概念视觉</figcaption></figure>` : ""}<h3>${data.heading}</h3><p>${data.body}</p><ul>${data.points.map((point) => `<li>${point}</li>`).join("")}</ul><div class="detail-tags">${data.tags.map((tag) => `<span>${tag}</span>`).join("")}</div><div class="detail-links">${data.links.map(([label, url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`).join("")}</div>`;
+    dialog.setAttribute("aria-labelledby", "work-title");
+    previousOverflow = document.body.style.overflow;
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+    syncSceneMotion();
+    dialog.querySelector("[data-close-dialog]")?.focus();
+  }
   document.querySelectorAll("[data-work]").forEach((button) => {
     button.hidden = false;
-    button.addEventListener("click", () => {
-      const data = workData[button.dataset.work];
-      const detail = document.getElementById("work-detail");
-      if (!dialog || !detail || !data) return;
-      returnFocus = button;
-      detail.innerHTML = `<p class="detail-category">${data.category}</p><h2 id="work-title">${data.title}</h2><p class="detail-intro">${data.intro}</p>${data.image ? `<figure><img src="${data.image}" alt="${data.alt}" width="1536" height="1024"><figcaption>项目概念视觉</figcaption></figure>` : ""}<h3>${data.heading}</h3><p>${data.body}</p><ul>${data.points.map((point) => `<li>${point}</li>`).join("")}</ul><div class="detail-tags">${data.tags.map((tag) => `<span>${tag}</span>`).join("")}</div><div class="detail-links">${data.links.map(([label, url]) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`).join("")}</div>`;
-      dialog.setAttribute("aria-labelledby", "work-title");
-      previousOverflow = document.body.style.overflow;
-      dialog.showModal();
-      document.body.style.overflow = "hidden";
-      dialog.querySelector("[data-close-dialog]")?.focus();
-    });
+    button.addEventListener("click", () =>
+      openWork(button.dataset.work, button),
+    );
   });
   dialog
     ?.querySelector("[data-close-dialog]")
@@ -356,18 +387,26 @@
     closeDialog();
   });
   dialog?.addEventListener("click", (event) => {
-    if (event.target === dialog) closeDialog();
+    if (event.target !== dialog) return;
+    const rect = dialog.getBoundingClientRect();
+    if (
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+    )
+      closeDialog();
   });
   dialog?.addEventListener("close", () => {
     document.body.style.overflow = previousOverflow;
+    syncSceneMotion();
     returnFocus?.focus({ preventScroll: true });
   });
-
   const copyButton = document.querySelector("[data-copy-email]");
   if (copyButton) copyButton.hidden = false;
   copyButton?.addEventListener("click", async () => {
-    const email = document.querySelector("[data-email-address]");
-    const status = document.querySelector("[data-copy-status]");
+    const email = document.querySelector("[data-email-address]"),
+      status = document.querySelector("[data-copy-status]");
     if (!email || !status) return;
     try {
       await navigator.clipboard.writeText(email.textContent.trim());
@@ -376,16 +415,18 @@
       const range = document.createRange();
       range.selectNodeContents(email);
       const selection = getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
       status.textContent = "已选中邮箱，请手动复制。";
     }
   });
   window.addEventListener("pagehide", (event) => {
-    if (event.persisted) {
-      scene?.setMotion(false);
-      sceneRunning = false;
-    } else {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    stopDemo();
+    scene?.setMotion(false);
+    sceneRunning = false;
+    if (!event.persisted) {
       active = false;
       scene?.dispose();
     }
@@ -393,5 +434,8 @@
   window.addEventListener("pageshow", () => {
     active = true;
     applyPreferences();
+    measure();
   });
+  measure();
+  applyPreferences();
 })();

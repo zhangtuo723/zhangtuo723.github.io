@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#aeb9a7" />
-    <title>About zhangtuo — Agent 工程师</title>
+    <meta name="theme-color" content="#080f1c" />
+    <title>zhangtuo — AI 科技工厂 / Agent 工程师</title>
     <meta
       name="description"
-      content="你好，我是 zhangtuo，一名 Agent 工程师。探索智能体、LLM 应用与自动化工作流，把好奇心变成真实可用的工具。"
+      content="你好，我是 zhangtuo，一名 Agent 工程师。走进我的AI 科技工厂，看看智能体、开发工具与代码实验如何开始运转。"
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
-    <meta property="og:title" content="About zhangtuo — Agent 工程师" />
+    <meta property="og:title" content="zhangtuo — AI 科技工厂" />
     <meta
       property="og:description"
-      content="让想法发生，让工具思考。zhangtuo 的个人介绍与开源作品。"
+      content="让想法，开始运转。一个 Agent 工程师的个人空间与开源作品。"
     />
     <meta property="og:url" content="https://zhangtuo723.github.io/" />
     <meta
@@ -25,34 +25,42 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link
       rel="preload"
-      href="assets/mansalva-latin-400.woff2"
+      href="assets/space-grotesk-latin-500.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      { "imports": { "three": "./assets/vendor/three.module.min.js" } }
+    </script>
     <script src="site.js" defer></script>
   </head>
-  <body data-phase="hero">
+  <body data-phase="home">
     <a class="skip-link" href="#main">跳转到正文</a>
 
-    <div id="portrait-scene" class="portrait-scene" aria-hidden="true">
-      <img
-        class="scene-poster"
-        src="assets/character-poster.webp"
-        alt=""
-        width="1122"
-        height="1402"
-        fetchpriority="high"
-        decoding="async"
-      />
+    <div id="world-scene" class="world-scene" aria-hidden="true">
+      <picture
+        ><source
+          media="(max-width: 760px)"
+          srcset="assets/workshop-mobile.webp" />
+        <img
+          class="scene-poster"
+          src="assets/workshop-poster.webp"
+          alt=""
+          width="1600"
+          height="1000"
+          fetchpriority="high"
+          decoding="async"
+      /></picture>
     </div>
     <div class="scene-scrim" aria-hidden="true"></div>
 
     <header class="site-header">
       <a class="brand" href="#home" aria-label="zhangtuo，返回首页"
-        >zhangtuo<span aria-hidden="true">✳</span></a
+        >zhangtuo<span class="brand-mark" aria-hidden="true">/</span></a
       >
+      <span class="header-note" lang="en">AN AGENT FACTORY</span>
       <button
         class="menu-toggle"
         type="button"
@@ -70,486 +78,391 @@
         data-navigation
         aria-label="主导航"
       >
-        <a href="#about">关于</a>
-        <a href="#works">作品</a>
-        <a href="#contact">联系 <span aria-hidden="true">↗</span></a>
+        <a href="#about">关于</a><a href="#works">作品</a
+        ><a href="#contact">联系 <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
 
     <main id="main">
-      <section class="hero" id="home" aria-labelledby="hero-title">
-        <div class="hero-corner hero-corner-left">
-          <span>PERSONAL SPACE</span>
-          <span>Code, curiosity &amp; a little play.</span>
-        </div>
-        <div class="hero-corner hero-corner-right">
-          <span>AGENT ENGINEER</span>
-          <span>Portfolio / 2026</span>
-        </div>
-        <div class="hero-frame" aria-hidden="true">
-          <span>+</span><span>+</span><span>+</span><span>+</span>
-        </div>
+      <section
+        class="scene-chapter hero"
+        id="home"
+        data-scene-step="home"
+        data-progress="0"
+        aria-labelledby="hero-title"
+      >
         <div class="hero-copy">
-          <p class="hero-kicker">你好，欢迎来到我的小小世界。</p>
-          <h1 id="hero-title" lang="en">
-            About <span>zhangtuo</span><i aria-hidden="true">✳</i>
-          </h1>
+          <p class="eyebrow">
+            <span class="live-dot" aria-hidden="true"></span> ZHANGTUO · AGENT
+            ENGINEER
+          </p>
+          <h1 id="hero-title">让想法，<br /><span>开始运转。</span></h1>
           <p class="hero-description">
-            一名喜欢把「如果」变成现实的
-            <strong>Agent 工程师</strong
-            >。<br />在代码、智能体和日常灵感之间，认真构建，也保持好奇。
+            你好，我是 zhangtuo，一名 Agent 工程师。<br />欢迎来到我的 AI
+            科技工厂。
           </p>
           <div class="hero-actions">
-            <a class="pill-link pill-light" href="#works"
-              >看看我的作品 <span aria-hidden="true">↗</span></a
+            <a class="button button-dark" href="#about"
+              >进入工厂 <span aria-hidden="true">↓</span></a
             >
-            <a class="pill-link pill-clear" href="#contact"
-              >打个招呼 <span aria-hidden="true">↗</span></a
+            <button
+              class="text-link demo-button"
+              type="button"
+              data-run-demo
+              hidden
             >
+              看一次编排演示 <span aria-hidden="true">↗</span>
+            </button>
           </div>
+          <p class="hero-footnote">从数据与工具，到机器人与模型创作。</p>
+          <p
+            class="demo-status"
+            data-demo-status
+            role="status"
+            aria-live="polite"
+          ></p>
         </div>
+        <span class="scene-annotation" aria-hidden="true"
+          ><span class="annotation-line"></span>IDEAS INTO SYSTEMS</span
+        >
         <a class="scroll-cue" href="#about"
           ><span class="scroll-track" aria-hidden="true"><span></span></span
-          ><span>向下滚动，认识我</span><span aria-hidden="true">↓</span></a
+          >向下滚动，故事开始<span aria-hidden="true">↓</span></a
         >
-        <span class="hero-side-note" aria-hidden="true"
-          >A WORK IN PROGRESS, ALWAYS.</span
-        >
-      </section>
-
-      <section class="journey" id="about" aria-labelledby="journey-title">
-        <h2 class="sr-only" id="journey-title">关于我：三个正在探索的方向</h2>
-        <div id="journey" class="journey-anchor" aria-hidden="true"></div>
-        <article
-          class="journey-chapter"
-          data-chapter="1"
-          aria-labelledby="chapter-one-title"
-        >
-          <div class="chapter-copy">
-            <p class="chapter-label"><span>01 / 03</span> ABOUT ME</p>
-            <h3 id="chapter-one-title">让工具，<br />与你一起思考。</h3>
-            <p>
-              我是 zhangtuo，一名 Agent 工程师。日常专注于智能 Agent 系统、LLM
-              应用与自动化工作流，把「看似魔法」的能力，变成稳定可靠的工程系统。
-            </p>
-            <p>
-              相比堆叠新模型，我更着迷于系统设计：上下文管理、工具编排、记忆机制与人机协作。
-            </p>
-            <div class="chapter-tags" aria-label="探索方向">
-              <span>AI Agents</span><span>LLM</span><span>Automation</span>
-            </div>
-            <span class="chapter-handnote" aria-hidden="true"
-              >make things think.</span
-            >
-          </div>
-        </article>
-        <article
-          class="journey-chapter"
-          data-chapter="2"
-          aria-labelledby="chapter-two-title"
-        >
-          <div class="chapter-copy">
-            <p class="chapter-label"><span>02 / 03</span> HOW I BUILD</p>
-            <h3 id="chapter-two-title">复杂留给系统，<br />简单留给用户。</h3>
-            <p>
-              从一个浏览器里的小工具，到一条能自己执行的工作流，我在意的不只是「能跑」，还有它是否真正好用。
-            </p>
-            <p>
-              用 Python、TypeScript 与 Go 连接想法，用 React、FastAPI
-              和熟悉的基础设施把它实现。让 demo 走向
-              product，也让技术回到具体问题。
-            </p>
-            <div class="chapter-tags" aria-label="技术栈">
-              <span>Python</span><span>TypeScript</span><span>Go</span
-              ><span>React</span>
-            </div>
-            <span class="chapter-handnote" aria-hidden="true"
-              >less friction, more possibility.</span
-            >
-          </div>
-        </article>
-        <article
-          class="journey-chapter"
-          data-chapter="3"
-          aria-labelledby="chapter-three-title"
-        >
-          <div class="chapter-copy">
-            <p class="chapter-label"><span>03 / 03</span> STILL CURIOUS</p>
-            <h3 id="chapter-three-title">在探索里学习，<br />在开源里相遇。</h3>
-            <p>
-              最近在探索多 Agent
-              协作与工具自动发现，也在把日常工作流封装成可以复用的
-              Skill。强化学习、模型微调，都是这场探索的一部分。
-            </p>
-            <p>
-              闲下来会写小工具、读硬科幻、跑步。我相信，好的工具应该让人变得更聪明，也更自由地创造。
-            </p>
-            <a
-              class="underlined-link"
-              href="https://github.com/zhangtuo723"
-              target="_blank"
-              rel="noopener noreferrer"
-              >到 GitHub 看看我在做什么 <span aria-hidden="true">↗</span
-              ><span class="sr-only">（新窗口）</span></a
-            >
-            <span class="chapter-handnote" aria-hidden="true"
-              >stay curious. keep making.</span
-            >
-          </div>
-        </article>
-      </section>
-
-      <section class="works-section" id="works" aria-labelledby="works-title">
-        <div class="works-stage" data-gallery>
-          <div class="gallery-sticky">
-            <div class="works-heading">
-              <div>
-                <p class="section-kicker">A FEW THINGS I’VE MADE</p>
-                <h2 id="works-title">
-                  想法，正在发生<span aria-hidden="true">.</span>
-                </h2>
-              </div>
-              <p class="works-intro">
-                从日常工具到智能体，<br />一些认真做过的小事。
-              </p>
-            </div>
-            <div
-              class="work-track"
-              data-gallery-track
-              tabindex="0"
-              role="region"
-              aria-label="四个精选项目，可横向滚动浏览"
-            >
-              <article
-                class="work-card"
-                data-work-card
-                aria-labelledby="forgekit-title"
-              >
-                <div class="work-art work-art-tools">
-                  <img
-                    src="assets/modular-tools.webp"
-                    alt="银白色与绿色模块组成的抽象开发者工具系统"
-                    width="1536"
-                    height="1024"
-                    loading="eager"
-                    decoding="async"
-                  />
-                  <span class="art-caption"
-                    >TOOLS THAT GET OUT OF YOUR WAY.</span
-                  >
-                  <span class="work-index" aria-hidden="true">01</span>
-                </div>
-                <div class="work-copy">
-                  <p class="work-category">DEVELOPER TOOLS / 已上线</p>
-                  <h3 id="forgekit-title">
-                    <a
-                      href="https://forgekit.cn/zh"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >ForgeKit <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </h3>
-                  <p>
-                    一套纯浏览器端的开发者在线工具箱。打开即用，让开发中的琐碎问题，在一个地方解决。
-                  </p>
-                  <p class="work-note">数据不离开浏览器。</p>
-                  <ul class="work-tags" aria-label="项目技术">
-                    <li>React</li>
-                    <li>TypeScript</li>
-                    <li>PWA</li>
-                  </ul>
-                  <div class="work-actions">
-                    <button
-                      class="detail-button"
-                      type="button"
-                      data-work="forgekit"
-                      hidden
-                      aria-haspopup="dialog"
-                    >
-                      展开项目 <span aria-hidden="true">↗</span></button
-                    ><a
-                      href="https://github.com/zhangtuo723/ForgeKit"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >源码 <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </div>
-                </div>
-              </article>
-              <article
-                class="work-card"
-                data-work-card
-                aria-labelledby="analysis-title"
-              >
-                <div class="work-art work-art-agent">
-                  <img
-                    src="assets/neural-sculpture.webp"
-                    alt="环绕智能核心的绿色轨道，象征从信息到洞察的连接"
-                    width="1536"
-                    height="1024"
-                    loading="eager"
-                    decoding="async"
-                  />
-                  <span class="art-caption"
-                    >FROM A QUESTION TO AN INSIGHT.</span
-                  >
-                  <span class="work-index" aria-hidden="true">02</span>
-                </div>
-                <div class="work-copy">
-                  <p class="work-category">AI AGENT / 内容洞察</p>
-                  <h3 id="analysis-title">
-                    <a
-                      href="https://github.com/zhangtuo723/hot_analysis_plugin"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >小红书<br />爆款分析助手
-                      <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </h3>
-                  <p>
-                    从一句提问到一份洞察。Agent
-                    自动操控浏览器，分析笔记、评论与视频，输出可视化的内容规律报告。
-                  </p>
-                  <ul class="work-tags" aria-label="项目技术">
-                    <li>Python</li>
-                    <li>AI Agent</li>
-                    <li>Browser</li>
-                  </ul>
-                  <div class="work-actions">
-                    <button
-                      class="detail-button"
-                      type="button"
-                      data-work="analysis"
-                      hidden
-                      aria-haspopup="dialog"
-                    >
-                      展开项目 <span aria-hidden="true">↗</span></button
-                    ><a
-                      href="https://github.com/zhangtuo723/hot_analysis_plugin"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >源码 <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </div>
-                </div>
-              </article>
-              <article
-                class="work-card"
-                data-work-card
-                aria-labelledby="flappy-title"
-              >
-                <div class="work-art work-art-flappy">
-                  <div class="flappy-diagram" aria-hidden="true">
-                    <span class="flappy-orbit orbit-one"></span
-                    ><span class="flappy-orbit orbit-two"></span
-                    ><span class="flappy-bird"><i></i></span
-                    ><span class="flappy-obstacle obstacle-one"></span
-                    ><span class="flappy-obstacle obstacle-two"></span
-                    ><span class="flappy-ground"></span
-                    ><span class="flappy-state">STATE → ACTION → REWARD</span>
-                  </div>
-                  <span class="art-caption"
-                    >LEARNING, ONE ATTEMPT AT A TIME.</span
-                  >
-                  <span class="work-index" aria-hidden="true">03</span>
-                </div>
-                <div class="work-copy">
-                  <p class="work-category">REINFORCEMENT LEARNING / 实验</p>
-                  <h3 id="flappy-title">
-                    <a
-                      href="https://github.com/zhangtuo723/FlappyBird_Qlearning"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >FlappyBird<br />Q-learning
-                      <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </h3>
-                  <p>
-                    用 PyTorch
-                    实现的强化学习入门项目。在一个小小的游戏世界里，串起状态、动作、奖励与
-                    Q-learning / DQN 的核心概念。
-                  </p>
-                  <ul class="work-tags" aria-label="项目技术">
-                    <li>Python</li>
-                    <li>PyTorch</li>
-                    <li>RL</li>
-                  </ul>
-                  <div class="work-actions">
-                    <button
-                      class="detail-button"
-                      type="button"
-                      data-work="flappy"
-                      hidden
-                      aria-haspopup="dialog"
-                    >
-                      展开项目 <span aria-hidden="true">↗</span></button
-                    ><a
-                      href="https://github.com/zhangtuo723/FlappyBird_Qlearning"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >源码 <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </div>
-                </div>
-              </article>
-              <article
-                class="work-card"
-                data-work-card
-                aria-labelledby="poetry-title"
-              >
-                <div class="work-art work-art-poetry">
-                  <div class="poetry-diagram" aria-hidden="true">
-                    <span class="poetry-moon"></span
-                    ><span class="poetry-mountain mountain-one"></span
-                    ><span class="poetry-mountain mountain-two"></span
-                    ><span class="poetry-characters">山<span>川</span>月</span
-                    ><span class="poetry-seal">字里<br />行间</span
-                    ><span class="poetry-process">语料 · 微调 · 生成</span>
-                  </div>
-                  <span class="art-caption">OLD WORDS. NEW POSSIBILITIES.</span>
-                  <span class="work-index" aria-hidden="true">04</span>
-                </div>
-                <div class="work-copy">
-                  <p class="work-category">MODEL FINETUNING / 语言与创作</p>
-                  <h3 id="poetry-title">
-                    <a
-                      href="https://github.com/zhangtuo723/qwen3_poetry_generation"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >Qwen3<br />唐诗生成 <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </h3>
-                  <p>
-                    基于 Hugging Face 数据集，对 Qwen3-0.6B 进行 LoRA
-                    微调。探索模型如何学习唐诗风格，让技术与文字的想象力相遇。
-                  </p>
-                  <ul class="work-tags" aria-label="项目技术">
-                    <li>Python</li>
-                    <li>LoRA</li>
-                    <li>Qwen3</li>
-                  </ul>
-                  <div class="work-actions">
-                    <button
-                      class="detail-button"
-                      type="button"
-                      data-work="poetry"
-                      hidden
-                      aria-haspopup="dialog"
-                    >
-                      展开项目 <span aria-hidden="true">↗</span></button
-                    ><a
-                      href="https://github.com/zhangtuo723/qwen3_poetry_generation"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >源码 <span aria-hidden="true">↗</span
-                      ><span class="sr-only">（新窗口）</span></a
-                    >
-                  </div>
-                </div>
-              </article>
-            </div>
-            <div class="gallery-footer">
-              <a
-                href="https://github.com/zhangtuo723"
-                target="_blank"
-                rel="noopener noreferrer"
-                >更多探索，在 GitHub <span aria-hidden="true">↗</span
-                ><span class="sr-only">（新窗口）</span></a
-              >
-              <div class="gallery-progress" aria-hidden="true">
-                <span data-gallery-progress></span>
-              </div>
-              <span class="gallery-hint" aria-hidden="true"
-                >继续探索 <span>→</span></span
-              >
-            </div>
-          </div>
-        </div>
       </section>
 
       <section
-        class="contact-section"
+        class="scene-chapter about-chapter"
+        id="about"
+        data-scene-step="about"
+        data-progress="0.15"
+        aria-labelledby="about-title"
+      >
+        <div class="chapter-copy">
+          <p class="eyebrow">
+            <span class="chapter-number">01 / 06</span> THE SYSTEM BUILDER
+          </p>
+          <h2 id="about-title">把好奇心，<br />做成有用的东西。</h2>
+          <p>
+            我专注于智能 Agent、LLM
+            应用与自动化工作流，让工具不只执行指令，也能帮助人思考和创造。
+          </p>
+          <p>
+            用 Python、TypeScript 与 Go 连接想法，用 React、FastAPI
+            把它实现。最近在探索多 Agent 协作、工具自动发现与可复用的 Skill。
+          </p>
+          <ul class="tech-list" aria-label="技术与方向">
+            <li>AI Agents</li>
+            <li>Python</li>
+            <li>TypeScript</li>
+            <li>Go</li>
+          </ul>
+          <div class="station-navigation" aria-label="探索四个项目">
+            <p class="small-label">沿着工厂，探索四个项目</p>
+            <a href="#forgekit" data-station="forgekit"
+              ><span>01</span> ForgeKit · 工具生产区
+              <span aria-hidden="true">↗</span></a
+            >
+            <a href="#analysis" data-station="analysis"
+              ><span>02</span> 分析助手 · 数据分析区
+              <span aria-hidden="true">↗</span></a
+            >
+            <a href="#flappy" data-station="flappy"
+              ><span>03</span> Flappy · 机器人实验区
+              <span aria-hidden="true">↗</span></a
+            >
+            <a href="#poetry" data-station="poetry"
+              ><span>04</span> Qwen3 · 模型创作区
+              <span aria-hidden="true">↗</span></a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="works-section" id="works" aria-label="精选开源作品">
+        <article
+          class="scene-chapter project-chapter"
+          id="forgekit"
+          data-scene-step="forgekit"
+          data-progress="0.30"
+          aria-labelledby="forgekit-title"
+        >
+          <div class="chapter-copy">
+            <p class="eyebrow">
+              <span class="chapter-number">02 / 06</span> THE TOOLCHAIN
+            </p>
+            <p class="project-category">开发者工具 · 已上线</p>
+            <h2 id="forgekit-title">
+              ForgeKit<span class="title-period">.</span>
+            </h2>
+            <p class="project-lead">
+              把零散的小工具，<br />接成一条顺畅的工具链。
+            </p>
+            <p>
+              一套纯浏览器端的开发者在线工具箱。打开即用，让开发中的琐碎问题在一个地方解决，数据不离开浏览器。
+            </p>
+            <ul class="tech-list" aria-label="ForgeKit 技术栈">
+              <li>React</li>
+              <li>TypeScript</li>
+              <li>PWA</li>
+            </ul>
+            <div class="project-actions">
+              <button
+                class="button button-dark"
+                type="button"
+                data-work="forgekit"
+                aria-haspopup="dialog"
+                hidden
+              >
+                展开项目 <span aria-hidden="true">↗</span></button
+              ><a
+                class="text-link"
+                href="https://forgekit.cn/zh"
+                target="_blank"
+                rel="noopener noreferrer"
+                >打开工具箱 <span aria-hidden="true">↗</span
+                ><span class="sr-only">（新窗口）</span></a
+              >
+            </div>
+            <a
+              class="source-link"
+              href="https://github.com/zhangtuo723/ForgeKit"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub / ForgeKit <span aria-hidden="true">↗</span
+              ><span class="sr-only">（新窗口）</span></a
+            >
+          </div>
+        </article>
+        <article
+          class="scene-chapter project-chapter"
+          id="analysis"
+          data-scene-step="analysis"
+          data-progress="0.48"
+          aria-labelledby="analysis-title"
+        >
+          <div class="chapter-copy">
+            <p class="eyebrow">
+              <span class="chapter-number">03 / 06</span> THE DATA HALL
+            </p>
+            <p class="project-category">AI Agent · 内容洞察</p>
+            <h2 id="analysis-title">从一句提问，<br />到一份洞察。</h2>
+            <p class="project-lead">小红书爆款分析助手</p>
+            <p>
+              让 Agent
+              自动操控浏览器，分析笔记、评论与视频，再把内容规律整理成可视化报告。把信息收集与分析，串成一条工作流。
+            </p>
+            <ul class="tech-list" aria-label="分析助手技术栈">
+              <li>Python</li>
+              <li>AI Agent</li>
+              <li>Browser Automation</li>
+            </ul>
+            <div class="project-actions">
+              <button
+                class="button button-dark"
+                type="button"
+                data-work="analysis"
+                aria-haspopup="dialog"
+                hidden
+              >
+                展开项目 <span aria-hidden="true">↗</span></button
+              ><a
+                class="text-link"
+                href="https://github.com/zhangtuo723/hot_analysis_plugin"
+                target="_blank"
+                rel="noopener noreferrer"
+                >查看源码 <span aria-hidden="true">↗</span
+                ><span class="sr-only">（新窗口）</span></a
+              >
+            </div>
+            <p class="object-caption">
+              数据分析区：把收集、分析与报告串成流程。
+            </p>
+          </div>
+        </article>
+        <article
+          class="scene-chapter project-chapter"
+          id="flappy"
+          data-scene-step="flappy"
+          data-progress="0.66"
+          aria-labelledby="flappy-title"
+        >
+          <div class="chapter-copy">
+            <p class="eyebrow">
+              <span class="chapter-number">04 / 06</span> THE ROBOTICS LAB
+            </p>
+            <p class="project-category">强化学习 · 代码实验</p>
+            <h2 id="flappy-title">再试一次，<br />就更接近一点。</h2>
+            <p class="project-lead">FlappyBird Q-learning</p>
+            <p>
+              用 PyTorch
+              实现的强化学习入门项目。在一个小游戏里，串起状态、动作、奖励与
+              Q-learning / DQN 的核心概念，观察学习如何发生。
+            </p>
+            <ul class="tech-list" aria-label="FlappyBird 技术栈">
+              <li>Python</li>
+              <li>PyTorch</li>
+              <li>Q-learning / DQN</li>
+            </ul>
+            <div class="project-actions">
+              <button
+                class="button button-dark"
+                type="button"
+                data-work="flappy"
+                aria-haspopup="dialog"
+                hidden
+              >
+                展开项目 <span aria-hidden="true">↗</span></button
+              ><a
+                class="text-link"
+                href="https://github.com/zhangtuo723/FlappyBird_Qlearning"
+                target="_blank"
+                rel="noopener noreferrer"
+                >查看源码 <span aria-hidden="true">↗</span
+                ><span class="sr-only">（新窗口）</span></a
+              >
+            </div>
+            <p class="object-caption">
+              机器人实验区：用场景演绎尝试与学习的过程。
+            </p>
+          </div>
+        </article>
+        <article
+          class="scene-chapter project-chapter"
+          id="poetry"
+          data-scene-step="poetry"
+          data-progress="0.83"
+          aria-labelledby="poetry-title"
+        >
+          <div class="chapter-copy">
+            <p class="eyebrow">
+              <span class="chapter-number">05 / 06</span> THE MODEL STUDIO
+            </p>
+            <p class="project-category">模型微调 · 语言与创作</p>
+            <h2 id="poetry-title">代码之外，<br />还有字里行间。</h2>
+            <p class="project-lead">Qwen3 唐诗生成</p>
+            <p>
+              基于 Hugging Face 数据集，对 Qwen3-0.6B 进行 LoRA
+              微调。探索模型如何学习唐诗风格，让语言技术与文字的想象力相遇。
+            </p>
+            <ul class="tech-list" aria-label="唐诗生成技术栈">
+              <li>Python</li>
+              <li>LoRA</li>
+              <li>Qwen3</li>
+            </ul>
+            <div class="project-actions">
+              <button
+                class="button button-dark"
+                type="button"
+                data-work="poetry"
+                aria-haspopup="dialog"
+                hidden
+              >
+                展开项目 <span aria-hidden="true">↗</span></button
+              ><a
+                class="text-link"
+                href="https://github.com/zhangtuo723/qwen3_poetry_generation"
+                target="_blank"
+                rel="noopener noreferrer"
+                >查看源码 <span aria-hidden="true">↗</span
+                ><span class="sr-only">（新窗口）</span></a
+              >
+            </div>
+            <p class="object-caption">模型创作区：探索语言模型与风格化生成。</p>
+          </div>
+        </article>
+      </section>
+
+      <section
+        class="scene-chapter contact-section"
         id="contact"
+        data-scene-step="contact"
+        data-progress="1"
         aria-labelledby="contact-title"
       >
-        <p class="section-kicker">GOOD THINGS START WITH A HELLO.</p>
-        <h2 id="contact-title">
-          一起创造<br /><span>一些有意思的事。</span
-          ><i aria-hidden="true">✳</i>
-        </h2>
-        <div class="contact-bottom">
-          <div class="contact-copy">
-            <p>
-              合作、交流，或只是聊聊 Agent 与 LLM。<br />如果你也有一个「不如试试」的想法，欢迎来信。
-            </p>
-            <a class="email-link" href="mailto:1605728334@qq.com"
-              ><span data-email-address>1605728334@qq.com</span>
-              <span aria-hidden="true">↗</span></a
-            ><button
-              class="copy-email"
+        <div class="contact-heading">
+          <p class="eyebrow">
+            <span class="chapter-number">06 / 06</span> LEAVE THE DOOR OPEN
+          </p>
+          <h2 id="contact-title">下一个想法，<br />也许来自你。</h2>
+          <p>
+            合作、交流，或只是聊聊 Agent 与 LLM。<br />欢迎带着一个「不如试试」的想法来信。
+          </p>
+          <a class="email-link" href="mailto:1605728334@qq.com"
+            ><span data-email-address>1605728334@qq.com</span
+            ><span aria-hidden="true">↗</span></a
+          >
+          <div class="contact-links">
+            <button
+              class="text-link copy-email"
               type="button"
               data-copy-email
-              hidden
               aria-controls="copy-status"
+              hidden
             >
-              复制邮箱 <span aria-hidden="true">⧉</span>
-            </button>
-            <p
-              class="copy-status"
-              id="copy-status"
-              data-copy-status
-              role="status"
-              aria-live="polite"
-            ></p>
+              复制邮箱 <span aria-hidden="true">⧉</span></button
+            ><a
+              class="text-link"
+              href="https://github.com/zhangtuo723"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub <span aria-hidden="true">↗</span
+              ><span class="sr-only">（新窗口）</span></a
+            >
           </div>
-          <a
-            class="contact-github"
-            href="https://github.com/zhangtuo723"
-            target="_blank"
-            rel="noopener noreferrer"
-            >GitHub <span aria-hidden="true">↗</span
-            ><span class="sr-only">（新窗口）</span></a
-          >
+          <p
+            class="copy-status"
+            id="copy-status"
+            data-copy-status
+            role="status"
+            aria-live="polite"
+          ></p>
         </div>
         <footer class="site-footer">
-          <a href="#home" class="footer-name"
-            >zhangtuo<span aria-hidden="true">✳</span></a
+          <a class="footer-name" href="#home"
+            >zhangtuo<span aria-hidden="true">/</span></a
           ><span>© 2026 · 以好奇心为起点。</span><a href="#home">回到顶部 ↑</a>
         </footer>
       </section>
     </main>
 
+    <div class="scene-status" aria-label="场景进度">
+      <div>
+        <span class="status-dot" aria-hidden="true"></span
+        ><span data-scene-label>AI 科技工厂</span
+        ><span class="step-number" data-step-number aria-hidden="true"
+          >01 / 07</span
+        >
+      </div>
+      <div class="scene-progress" aria-hidden="true">
+        <span data-scene-progress></span>
+      </div>
+    </div>
     <div class="view-controls" aria-label="浏览方式">
       <button
         class="view-control"
         type="button"
         data-motion-toggle
-        hidden
         aria-pressed="false"
         aria-label="开启动态效果"
+        hidden
       >
         <span class="control-dot" aria-hidden="true"></span
-        ><span data-motion-label>动态效果</span>
-      </button>
-      <span class="controls-divider" aria-hidden="true"></span>
-      <button
+        ><span data-motion-label>动态效果</span></button
+      ><span class="controls-divider" aria-hidden="true"></span
+      ><button
         class="view-control"
         type="button"
         data-view-toggle
-        hidden
         aria-pressed="false"
+        hidden
       >
-        <span data-view-label>普通版</span><span aria-hidden="true">↗</span>
+        <span data-view-label>阅读普通版</span
+        ><span aria-hidden="true">↗</span>
       </button>
     </div>
     <p class="sr-only" id="view-status" role="status" aria-live="polite"></p>
+
     <dialog class="work-dialog" id="work-dialog" aria-label="项目详情">
       <button
         class="dialog-close"
@@ -563,15 +476,9 @@
     </dialog>
     <noscript
       ><p class="noscript-note">
-        你正在浏览静态版本，所有介绍与作品链接均可直接阅读。开启 JavaScript
-        后可体验 3D 场景与项目详情。
-      </p>
-      <style>
-        .view-controls,
-        .detail-button {
-          display: none;
-        }
-      </style></noscript
+        你正在浏览静态版本。所有介绍与项目链接均可阅读，开启 JavaScript
+        后可体验随滚动推进的 3D 科技工厂。
+      </p></noscript
     >
   </body>
 </html>
